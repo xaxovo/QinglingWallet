@@ -4,9 +4,19 @@ import 'package:intl/intl.dart';
 import '../models.dart';
 import '../providers.dart';
 import '../util.dart';
+import 'add_record_sheet.dart';
 
 class TransactionsScreen extends ConsumerWidget {
   const TransactionsScreen({super.key});
+
+  void _openEdit(BuildContext context, Tx t) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => AddRecordSheet(editTx: t),
+    );
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -86,6 +96,7 @@ class TransactionsScreen extends ConsumerWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         margin: const EdgeInsets.only(bottom: 8),
         child: ListTile(
+          onTap: () => _openEdit(context, t),
           leading: CircleAvatar(
             backgroundColor: color.withOpacity(0.15),
             child: Icon(iconFor(c?.icon ?? ''), color: color),

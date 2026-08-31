@@ -12,7 +12,7 @@ class AppDb {
     if (_db != null) return _db!;
     final dir = await getApplicationDocumentsDirectory();
     final path = p.join(dir.path, 'qinglingwallet.db');
-    _db = await openDatabase(path, version: 1, onCreate: _onCreate,
+    _db = await openDatabase(path, version: 2, onCreate: _onCreate,
         onConfigure: (db) => db.execute('PRAGMA foreign_keys = ON'));
     return _db!;
   }
@@ -49,8 +49,11 @@ class AppDb {
       ['购物', 'shopping_bag', 0xFF9575CD, 0],
       ['娱乐', 'sports_esports', 0xFF4DB6AC, 0],
       ['日用', 'home', 0xFFFFB74D, 0],
+      ['医疗', 'local_hospital', 0xFFF06292, 0],
+      ['其他', 'more_horiz', 0xFF9E9E9E, 0],
       ['工资', 'payments', 0xFF81C784, 1],
       ['奖金', 'celebration', 0xFFFFD54F, 1],
+      ['红包', 'redeem', 0xFFF48FB1, 1],
     ];
     for (final c in cats) {
       await db.insert('categories', {
@@ -80,9 +83,19 @@ class AppDb {
     });
   }
 
+  Future<int> updateTx(int id, double amount, int type, int categoryId,
+      String note, int ts) async {
+    return (await db).update('transactions', {
+      'amount': amount,
+      'type': type,
+      'categoryId': categoryId,
+      'note': note,
+      'ts': ts,
+    }, where: 'id = ?', whereArgs: [id]);
+  }
+
   Future<int> deleteTx(int id) async {
-    return (await db)
-        .delete('transactions', where: 'id = ?', whereArgs: [id]);
+    return (await db).delete('transactions', where: 'id = ?', whereArgs: [id]);
   }
 
   Future<List<Tx>> txs({int limit = 300}) async {

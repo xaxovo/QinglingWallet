@@ -17,6 +17,15 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
+  void _openEdit(BuildContext context, Tx t) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => AddRecordSheet(editTx: t),
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final balanceA = ref.watch(balanceProvider);
@@ -34,13 +43,14 @@ class HomeScreen extends ConsumerWidget {
             const SizedBox(height: 20),
             _BalanceCard(balance: balanceA.value ?? 0),
             const SizedBox(height: 20),
-            _QuickAdd(categories: cats, onAdd: () => _openAdd(context)),
+            _AddButton(onPressed: () => _openAdd(context)),
             const SizedBox(height: 20),
             Expanded(
               child: _Recent(
                 txs: txsA.value ?? const [],
                 map: map,
                 onAdd: () => _openAdd(context),
+                onEdit: (t) => _openEdit(context, t),
               ),
             ),
           ],
@@ -123,60 +133,35 @@ class _BalanceCard extends StatelessWidget {
   }
 }
 
-class _QuickAdd extends StatelessWidget {
-  const _QuickAdd({required this.categories, required this.onAdd});
-  final List<Category> categories;
-  final VoidCallback onAdd;
+class _AddButton extends StatelessWidget {
+  const _AddButton({required this.onPressed});
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
-    final exp = categories.where((c) => c.type == 0).take(4).toList();
-    return Row(
-      children: [
-        Expanded(
-          child: FilledButton.icon(
-            onPressed: onAdd,
-            icon: const Icon(Icons.add),
-            label: const Text('记一笔'),
-            style: FilledButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18)),
-            ),
-          ),
-        ),
-        const SizedBox(width: 12),
-        for (final c in exp) ...[
-          _chip(c),
-          const SizedBox(width: 8),
-        ],
-      ],
-    );
-  }
-
-  Widget _chip(Category c) {
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(12),
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            shape: BoxShape.circle,
-          ),
-          child: Icon(iconFor(c.icon), size: 20, color: Color(c.color)),
-        ),
-        const SizedBox(height: 6),
-        Text(c.name, style: const TextStyle(fontSize: 12)),
-      ],
+    return FilledButton.icon(
+      onPressed: onPressed,
+      icon: const Icon(Icons.add),
+      label: const Text('记一笔'),
+      style: FilledButton.styleFrom(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+      ),
     );
   }
 }
 
 class _Recent extends StatelessWidget {
-  const _Recent({required this.txs, required this.map, required this.onAdd});
+  const _Recent({
+    required this.txs,
+    required this.map,
+    required this.onAdd,
+    required this.onEdit,
+  });
   final List<Tx> txs;
   final Map<int, Category> map;
   final VoidCallback onAdd;
+  final void Function(Tx) onEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -220,6 +205,7 @@ class _Recent extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(18)),
                   child: ListTile(
+                    onTap: () => onEdit(t),
                     leading: CircleAvatar(
                       backgroundColor: color.withOpacity(0.15),
                       child: Icon(iconFor(c?.icon ?? ''), color: color),

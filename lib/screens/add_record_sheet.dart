@@ -7,8 +7,9 @@ import '../providers.dart';
 import '../util.dart';
 
 class AddRecordSheet extends ConsumerStatefulWidget {
-  const AddRecordSheet({super.key, this.initialCategoryId});
+  const AddRecordSheet({super.key, this.initialCategoryId, this.editTx});
   final int? initialCategoryId;
+  final Tx? editTx;
 
   @override
   ConsumerState<AddRecordSheet> createState() => _AddRecordSheetState();
@@ -17,14 +18,29 @@ class AddRecordSheet extends ConsumerStatefulWidget {
 class _AddRecordSheetState extends ConsumerState<AddRecordSheet> {
   int _type = 0;
   int? _categoryId;
-  final _amount = TextEditingController();
-  final _note = TextEditingController();
-  DateTime _date = DateTime.now();
+  late final TextEditingController _amount;
+  late final TextEditingController _note;
+  late DateTime _date;
+  String? _error;
+
+  bool get _isEdit => widget.editTx != null;
 
   @override
   void initState() {
     super.initState();
-    _categoryId = widget.initialCategoryId;
+    final t = widget.editTx;
+    if (t != null) {
+      _type = t.type;
+      _categoryId = t.categoryId;
+      _amount = TextEditingController(text: t.amount.toStringAsFixed(2));
+      _note = TextEditingController(text: t.note);
+      _date = DateTime.fromMillisecondsSinceEpoch(t.ts);
+    } else {
+      _amount = TextEditingController();
+      _note = TextEditingController();
+      _categoryId = widget.initialCategoryId;
+      _date = DateTime.now();
+    }
   }
 
   @override
@@ -44,11 +60,27 @@ class _AddRecordSheetState extends ConsumerState<AddRecordSheet> {
           color: Colors.white,
           borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
         ),
-        padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+        padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFE0E0E0),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Center(
+              child: Text(_isEdit ? '编辑记录' : '记一笔',
+                  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
+            ),
+            const SizedBox(height: 12),
             Row(
               children: [
                 _seg('支出', 0),
@@ -59,7 +91,7 @@ class _AddRecordSheetState extends ConsumerState<AddRecordSheet> {
             const SizedBox(height: 8),
             TextField(
               controller: _amount,
-              autofocus: true,
+              autofocus: !_isEdit,
               keyboardType:
                   const TextInputType.numberWithOptions(decimal: true),
               inputFormatters: [
@@ -72,7 +104,13 @@ class _AddRecordSheetState extends ConsumerState<AddRecordSheet> {
                 border: InputBorder.none,
               ),
             ),
-            const SizedBox(height: 12),
+            if (_error != null)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Text(_error!,
+                    style: const TextStyle(
+                        color: Colors.redAccent, fontSize: 13)),
+              ),
             catsA.when(
               data: (cats) => _categoryGrid(cats),
               loading: () => const LinearProgressIndicator(),
@@ -98,15 +136,14 @@ class _AddRecordSheetState extends ConsumerState<AddRecordSheet> {
               ],
             ),
             const SizedBox(height: 12),
-            FilledButton.icon(
-              onPressed: _save,
-              icon: const Icon(Icons.check),
-              label: const Text('保存'),
-              style: FilledButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18)),
-              ),
+            Row(
+              children: [
+                if (_isEdit) ...[
+                  _deleteBtn(),
+                  const SizedBox(width: 12),
+                ],
+                Expanded(child: _saveBtn()),
+              ],
             ),
           ],
         ),
@@ -116,17 +153,23 @@ class _AddRecordSheetState extends ConsumerState<AddRecordSheet> {
 
   Widget _seg(String label, int type) {
     final selected = _type == type;
-    return GestureDetector(
-      onTap: () => setState(() {
-        _type = type;
-        _categoryId = null;
-      }),
-      child: Container(
+    return _PressScale(
+      onTap: () {
+        HapticFeedback.selectionClick();
+        setState(() {
+          _type = type;
+          _categoryId = null;
+          _error = null;
+        });
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeOut,
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
         decoration: BoxDecoration(
           color: selected
               ? Theme.of(context).colorScheme.primary
-              : const Color(0xFFF4F0F0),
+              : const Color(0xFFF2EEEE),
           borderRadius: BorderRadius.circular(22),
         ),
         child: Text(label,
@@ -142,20 +185,47 @@ class _AddRecordSheetState extends ConsumerState<AddRecordSheet> {
     return Wrap(
       spacing: 8,
       runSpacing: 8,
-      children: [
-        for (final c in list)
-          ChoiceChip(
-            selected: _categoryId == c.id,
-            onSelected: (_) => setState(() => _categoryId = c.id),
-            avatar: Icon(iconFor(c.icon), color: Color(c.color), size: 18),
-            label: Text(c.name),
-            labelStyle: TextStyle(
-                color:
-                    _categoryId == c.id ? Colors.white : Colors.black87),
-            selectedColor: Theme.of(context).colorScheme.primary,
-            backgroundColor: const Color(0xFFF4F0F0),
-          ),
-      ],
+      children: [for (final c in list) _catChip(c)],
+    );
+  }
+
+  Widget _catChip(Category c) {
+    final selected = _categoryId == c.id;
+    final color = Color(c.color);
+    return _PressScale(
+      onTap: () {
+        HapticFeedback.selectionClick();
+        setState(() {
+          _categoryId = c.id;
+          _error = null;
+        });
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeOut,
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: selected
+              ? Theme.of(context).colorScheme.primary
+              : const Color(0xFFF2EEEE),
+          borderRadius: BorderRadius.circular(20),
+          border: selected
+              ? null
+              : Border.all(color: Colors.black.withOpacity(0.05)),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(iconFor(c.icon), size: 16, color: selected ? Colors.white : color),
+            const SizedBox(width: 6),
+            Text(c.name,
+                style: TextStyle(
+                    color: selected ? Colors.white : Colors.black87,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 13)),
+          ],
+        ),
+      ),
     );
   }
 
@@ -172,19 +242,100 @@ class _AddRecordSheetState extends ConsumerState<AddRecordSheet> {
   Future<void> _save() async {
     final amount = double.tryParse(_amount.text);
     if (amount == null || amount <= 0) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('请输入金额')));
+      setState(() => _error = '请输入正确的金额');
       return;
     }
     if (_categoryId == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('请选择分类')));
+      setState(() => _error = '请选择分类');
       return;
     }
     HapticFeedback.heavyImpact();
-    await ref.read(dbProvider).addTx(
-        amount, _type, _categoryId!, _note.text, _date.millisecondsSinceEpoch);
+    final db = ref.read(dbProvider);
+    if (_isEdit) {
+      await db.updateTx(widget.editTx!.id, amount, _type, _categoryId!,
+          _note.text, _date.millisecondsSinceEpoch);
+    } else {
+      await db.addTx(amount, _type, _categoryId!, _note.text,
+          _date.millisecondsSinceEpoch);
+    }
     bumpTick(ref);
     if (mounted) Navigator.of(context).pop();
+  }
+
+  Widget _saveBtn() {
+    return FilledButton.icon(
+      onPressed: _save,
+      icon: const Icon(Icons.check),
+      label: Text(_isEdit ? '更新' : '保存'),
+      style: FilledButton.styleFrom(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+      ),
+    );
+  }
+
+  Widget _deleteBtn() {
+    return OutlinedButton.icon(
+      onPressed: () async {
+        final ok = await showDialog<bool>(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: const Text('删除这条记录？'),
+            actions: [
+              TextButton(
+                  onPressed: () => Navigator.pop(ctx, false),
+                  child: const Text('取消')),
+              TextButton(
+                  onPressed: () => Navigator.pop(ctx, true),
+                  child: const Text('删除', style: TextStyle(color: Colors.red))),
+            ],
+          ),
+        );
+        if (ok == true) {
+          await ref.read(dbProvider).deleteTx(widget.editTx!.id);
+          bumpTick(ref);
+          if (mounted) Navigator.of(context).pop();
+        }
+      },
+      icon: const Icon(Icons.delete_outline, size: 18),
+      label: const Text('删除'),
+      style: OutlinedButton.styleFrom(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        foregroundColor: Colors.redAccent,
+        side: const BorderSide(color: Colors.redAccent),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+      ),
+    );
+  }
+}
+
+class _PressScale extends StatefulWidget {
+  const _PressScale({required this.child, required this.onTap});
+  final Widget child;
+  final VoidCallback onTap;
+
+  @override
+  State<_PressScale> createState() => _PressScaleState();
+}
+
+class _PressScaleState extends State<_PressScale> {
+  bool _down = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTapDown: (_) => setState(() => _down = true),
+      onTapUp: (_) {
+        setState(() => _down = false);
+        widget.onTap();
+      },
+      onTapCancel: () => setState(() => _down = false),
+      child: AnimatedScale(
+        scale: _down ? 0.94 : 1,
+        duration: const Duration(milliseconds: 120),
+        curve: Curves.easeOut,
+        child: widget.child,
+      ),
+    );
   }
 }
