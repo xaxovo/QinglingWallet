@@ -61,7 +61,8 @@ class _SplashGateState extends State<SplashGate> {
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 450),
-      curve: Curves.easeInOut,
+      switchInCurve: Curves.easeOut,
+      switchOutCurve: Curves.easeIn,
       child: _done
           ? const KeyedSubtree(
               key: ValueKey('home'), child: HomeShell())

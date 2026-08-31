@@ -1,67 +1,43 @@
-﻿build	构建 Release APK	﻿2026-08-31T03:47:09.2133985Z ##[group]Run flutter build apk --release
-build	构建 Release APK	2026-08-31T03:47:09.2134276Z ^[[36;1mflutter build apk --release^[[0m
-build	构建 Release APK	2026-08-31T03:47:09.2155747Z shell: /usr/bin/bash -e {0}
-build	构建 Release APK	2026-08-31T03:47:09.2155956Z env:
-build	构建 Release APK	2026-08-31T03:47:09.2156188Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
-build	构建 Release APK	2026-08-31T03:47:09.2156515Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
-build	构建 Release APK	2026-08-31T03:47:09.2156833Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.24.5-x64/flutter
-build	构建 Release APK	2026-08-31T03:47:09.2157101Z   PUB_CACHE: /home/runner/.pub-cache
-build	构建 Release APK	2026-08-31T03:47:09.2157280Z ##[endgroup]
-build	构建 Release APK	2026-08-31T03:47:09.4595816Z 
-build	构建 Release APK	2026-08-31T03:49:26.7219917Z Running Gradle task 'assembleRelease'...                        
-build	构建 Release APK	2026-08-31T03:49:26.7223676Z Checking the license for package Android SDK Build-Tools 33.0.1 in /usr/local/lib/android/sdk/licenses
-build	构建 Release APK	2026-08-31T03:49:26.8024864Z License for package Android SDK Build-Tools 33.0.1 accepted.
-build	构建 Release APK	2026-08-31T03:49:26.8025628Z Preparing "Install Android SDK Build-Tools 33.0.1 v.33.0.1".
-build	构建 Release APK	2026-08-31T03:49:30.9028689Z "Install Android SDK Build-Tools 33.0.1 v.33.0.1" ready.
-build	构建 Release APK	2026-08-31T03:49:30.9036577Z Installing Android SDK Build-Tools 33.0.1 in /usr/local/lib/android/sdk/build-tools/33.0.1
-build	构建 Release APK	2026-08-31T03:49:30.9037026Z "Install Android SDK Build-Tools 33.0.1 v.33.0.1" complete.
-build	构建 Release APK	2026-08-31T03:49:32.2074283Z "Install Android SDK Build-Tools 33.0.1 v.33.0.1" finished.
-build	构建 Release APK	2026-08-31T03:49:38.4079766Z lib/main.dart:72:41: Error: The method 'withValues' isn't defined for the class 'Color'.
-build	构建 Release APK	2026-08-31T03:49:38.4099162Z  - 'Color' is from 'dart:ui'.
-build	构建 Release APK	2026-08-31T03:49:38.4121522Z Try correcting the name to the name of an existing method, or defining a method named 'withValues'.
-build	构建 Release APK	2026-08-31T03:49:38.4128931Z                     color: Colors.black.withValues(alpha: 0.45))),
-build	构建 Release APK	2026-08-31T03:49:38.4144163Z                                         ^^^^^^^^^^
-build	构建 Release APK	2026-08-31T03:49:38.4160867Z lib/main.dart:89:43: Error: The method 'withValues' isn't defined for the class 'Color'.
-build	构建 Release APK	2026-08-31T03:49:38.4178753Z  - 'Color' is from 'dart:ui'.
-build	构建 Release APK	2026-08-31T03:49:38.4198938Z Try correcting the name to the name of an existing method, or defining a method named 'withValues'.
-build	构建 Release APK	2026-08-31T03:49:38.4218749Z           colors: [cs.primary, cs.primary.withValues(alpha: 0.75)],
-build	构建 Release APK	2026-08-31T03:49:38.4219340Z                                           ^^^^^^^^^^
-build	构建 Release APK	2026-08-31T03:49:38.4236393Z lib/main.dart:96:31: Error: The method 'withValues' isn't defined for the class 'Color'.
-build	构建 Release APK	2026-08-31T03:49:38.4258756Z  - 'Color' is from 'dart:ui'.
-build	构建 Release APK	2026-08-31T03:49:38.4278854Z Try correcting the name to the name of an existing method, or defining a method named 'withValues'.
-build	构建 Release APK	2026-08-31T03:49:38.4279928Z             color: cs.primary.withValues(alpha: 0.30),
-build	构建 Release APK	2026-08-31T03:49:38.4296245Z                               ^^^^^^^^^^
-build	构建 Release APK	2026-08-31T03:49:38.4318890Z lib/main.dart:106:52: Error: The method 'withValues' isn't defined for the class 'Color'.
-build	构建 Release APK	2026-08-31T03:49:38.4337261Z  - 'Color' is from 'dart:ui'.
-build	构建 Release APK	2026-08-31T03:49:38.4338588Z Try correcting the name to the name of an existing method, or defining a method named 'withValues'.
-build	构建 Release APK	2026-08-31T03:49:38.4353044Z               style: TextStyle(color: Colors.white.withValues(alpha: 0.8))),
-build	构建 Release APK	2026-08-31T03:49:38.4363249Z                                                    ^^^^^^^^^^
-build	构建 Release APK	2026-08-31T03:49:38.4363908Z lib/main.dart:130:37: Error: The method 'withValues' isn't defined for the class 'Color'.
-build	构建 Release APK	2026-08-31T03:49:38.4364527Z  - 'Color' is from 'dart:ui'.
-build	构建 Release APK	2026-08-31T03:49:38.4365349Z Try correcting the name to the name of an existing method, or defining a method named 'withValues'.
-build	构建 Release APK	2026-08-31T03:49:38.4365952Z                 color: Colors.white.withValues(alpha: 0.8), fontSize: 12)),
-build	构建 Release APK	2026-08-31T03:49:38.4366869Z                                     ^^^^^^^^^^
-build	构建 Release APK	2026-08-31T03:49:38.4367363Z lib/main.dart:222:43: Error: The method 'withValues' isn't defined for the class 'Color'.
-build	构建 Release APK	2026-08-31T03:49:38.4367877Z  - 'Color' is from 'dart:ui'.
-build	构建 Release APK	2026-08-31T03:49:38.4368616Z Try correcting the name to the name of an existing method, or defining a method named 'withValues'.
-build	构建 Release APK	2026-08-31T03:49:38.4369456Z                     backgroundColor: e.$5.withValues(alpha: 0.15),
-build	构建 Release APK	2026-08-31T03:49:38.4369866Z                                           ^^^^^^^^^^
-build	构建 Release APK	2026-08-31T03:49:41.6027854Z Target kernel_snapshot_program failed: Exception
-build	构建 Release APK	2026-08-31T03:49:41.6051418Z 
-build	构建 Release APK	2026-08-31T03:49:41.6058629Z 
-build	构建 Release APK	2026-08-31T03:49:41.6059124Z FAILURE: Build failed with an exception.
-build	构建 Release APK	2026-08-31T03:49:41.6059438Z 
-build	构建 Release APK	2026-08-31T03:49:41.6059582Z * What went wrong:
-build	构建 Release APK	2026-08-31T03:49:41.6059962Z Execution failed for task ':app:compileFlutterBuildRelease'.
-build	构建 Release APK	2026-08-31T03:49:41.6060773Z > Process 'command '/opt/hostedtoolcache/flutter/stable-3.24.5-x64/flutter/bin/flutter'' finished with non-zero exit value 1
-build	构建 Release APK	2026-08-31T03:49:41.6061334Z 
-build	构建 Release APK	2026-08-31T03:49:41.6061526Z * Try:
-build	构建 Release APK	2026-08-31T03:49:41.6061853Z > Run with --stacktrace option to get the stack trace.
-build	构建 Release APK	2026-08-31T03:49:41.6062313Z > Run with --info or --debug option to get more log output.
-build	构建 Release APK	2026-08-31T03:49:41.6062745Z > Run with --scan to get full insights.
-build	构建 Release APK	2026-08-31T03:49:41.6063129Z > Get more help at https://help.gradle.org.
-build	构建 Release APK	2026-08-31T03:49:41.6063394Z 
-build	构建 Release APK	2026-08-31T03:49:41.6063551Z BUILD FAILED in 2m 32s
-build	构建 Release APK	2026-08-31T03:49:42.0362924Z Running Gradle task 'assembleRelease'...                          152.5s
-build	构建 Release APK	2026-08-31T03:49:42.0394603Z Gradle task assembleRelease failed with exit code 1
-build	构建 Release APK	2026-08-31T03:49:42.0860155Z ##[error]Process completed with exit code 1.
+﻿build	构建 Release APK	﻿2026-08-31T05:50:33.6761360Z ##[group]Run flutter build apk --release
+build	构建 Release APK	2026-08-31T05:50:33.6762007Z ^[[36;1mflutter build apk --release^[[0m
+build	构建 Release APK	2026-08-31T05:50:33.6797999Z shell: /usr/bin/bash -e {0}
+build	构建 Release APK	2026-08-31T05:50:33.6798289Z env:
+build	构建 Release APK	2026-08-31T05:50:33.6798622Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+build	构建 Release APK	2026-08-31T05:50:33.6799444Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+build	构建 Release APK	2026-08-31T05:50:33.6799966Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.24.5-x64/flutter
+build	构建 Release APK	2026-08-31T05:50:33.6800373Z   PUB_CACHE: /home/runner/.pub-cache
+build	构建 Release APK	2026-08-31T05:50:33.6800639Z ##[endgroup]
+build	构建 Release APK	2026-08-31T05:50:34.2153105Z 
+build	构建 Release APK	2026-08-31T05:53:02.6705081Z Running Gradle task 'assembleRelease'...                        
+build	构建 Release APK	2026-08-31T05:53:02.6707555Z Checking the license for package Android SDK Build-Tools 33.0.1 in /usr/local/lib/android/sdk/licenses
+build	构建 Release APK	2026-08-31T05:53:02.6708894Z License for package Android SDK Build-Tools 33.0.1 accepted.
+build	构建 Release APK	2026-08-31T05:53:02.6710070Z Preparing "Install Android SDK Build-Tools 33.0.1 v.33.0.1".
+build	构建 Release APK	2026-08-31T05:53:04.2473736Z "Install Android SDK Build-Tools 33.0.1 v.33.0.1" ready.
+build	构建 Release APK	2026-08-31T05:53:04.2478275Z Installing Android SDK Build-Tools 33.0.1 in /usr/local/lib/android/sdk/build-tools/33.0.1
+build	构建 Release APK	2026-08-31T05:53:04.2486565Z "Install Android SDK Build-Tools 33.0.1 v.33.0.1" complete.
+build	构建 Release APK	2026-08-31T05:53:04.6491988Z "Install Android SDK Build-Tools 33.0.1 v.33.0.1" finished.
+build	构建 Release APK	2026-08-31T05:53:29.7506833Z lib/main.dart:64:7: Error: No named parameter with the name 'curve'.
+build	构建 Release APK	2026-08-31T05:53:29.7529946Z       curve: Curves.easeInOut,
+build	构建 Release APK	2026-08-31T05:53:29.7549719Z       ^^^^^
+build	构建 Release APK	2026-08-31T05:53:29.7551050Z /opt/hostedtoolcache/flutter/stable-3.24.5-x64/flutter/packages/flutter/lib/src/widgets/animated_switcher.dart:106:9: Context: Found this candidate, but the arguments don't match.
+build	构建 Release APK	2026-08-31T05:53:29.7569745Z   const AnimatedSwitcher({
+build	构建 Release APK	2026-08-31T05:53:29.7589640Z         ^^^^^^^^^^^^^^^^
+build	构建 Release APK	2026-08-31T05:53:34.6500254Z Target kernel_snapshot_program failed: Exception
+build	构建 Release APK	2026-08-31T05:53:34.6500863Z 
+build	构建 Release APK	2026-08-31T05:53:34.7509666Z 
+build	构建 Release APK	2026-08-31T05:53:34.7770910Z FAILURE: Build failed with an exception.
+build	构建 Release APK	2026-08-31T05:53:34.7771373Z 
+build	构建 Release APK	2026-08-31T05:53:34.7799730Z * What went wrong:
+build	构建 Release APK	2026-08-31T05:53:34.7838590Z Execution failed for task ':app:compileFlutterBuildRelease'.
+build	构建 Release APK	2026-08-31T05:53:34.7839967Z > Process 'command '/opt/hostedtoolcache/flutter/stable-3.24.5-x64/flutter/bin/flutter'' finished with non-zero exit value 1
+build	构建 Release APK	2026-08-31T05:53:34.7853393Z 
+build	构建 Release APK	2026-08-31T05:53:34.7853793Z * Try:
+build	构建 Release APK	2026-08-31T05:53:34.7854726Z > Run with --stacktrace option to get the stack trace.
+build	构建 Release APK	2026-08-31T05:53:34.7855515Z > Run with --info or --debug option to get more log output.
+build	构建 Release APK	2026-08-31T05:53:34.7881685Z > Run with --scan to get full insights.
+build	构建 Release APK	2026-08-31T05:53:34.7882504Z > Get more help at https://help.gradle.org.
+build	构建 Release APK	2026-08-31T05:53:34.8077539Z 
+build	构建 Release APK	2026-08-31T05:53:34.8099720Z BUILD FAILED in 3m
+build	构建 Release APK	2026-08-31T05:53:35.3263630Z Running Gradle task 'assembleRelease'...                          181.1s
+build	构建 Release APK	2026-08-31T05:53:35.3314800Z Gradle task assembleRelease failed with exit code 1
+build	构建 Release APK	2026-08-31T05:53:35.3384508Z ##[error]Process completed with exit code 1.
