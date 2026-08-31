@@ -9,7 +9,7 @@ class EffectConfig {
   final int durationMs;
   final double blastMax;
   final double blastMin;
-  final double blastDirection; // 弧度；-1.5708 = 向上
+  final double blastDirection; // 弧度；0=右, 1.57=下
   final bool directional;
   final bool enabled;
 
@@ -18,9 +18,9 @@ class EffectConfig {
     this.particles = 70,
     this.gravity = 0.20,
     this.durationMs = 3000,
-    this.blastMax = 20,
-    this.blastMin = 8,
-    this.blastDirection = -1.5708,
+    this.blastMax = 14,
+    this.blastMin = 6,
+    this.blastDirection = 0.9, // 从左上角向右下方洒落
     this.directional = true,
     this.enabled = true,
   });

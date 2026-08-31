@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'appearance.dart';
 
 // 保存成功后的纸屑爆发（开源 confetti，本地渲染）
-// 方向朝上喷射，受重力自然落下、落出屏幕底消失；参数全部从 EffectConfig 读取
+// 从屏幕左上角出发，向右下方自然洒落、落出屏幕底消失；参数从 EffectConfig 读取
 void showConfettiBurst(BuildContext context, {required EffectConfig effect}) {
   if (!effect.enabled || effect.colors.isEmpty) return;
   final overlay = Overlay.of(context, rootOverlay: true);
@@ -46,23 +46,33 @@ class _ConfettiBurstState extends State<_ConfettiBurst> {
   @override
   Widget build(BuildContext context) {
     final e = widget.effect;
-    return Positioned.fill(
-      child: IgnorePointer(
-        child: ConfettiWidget(
-          confettiController: _c,
-          shouldLoop: false,
-          blastDirectionality:
-              e.directional ? BlastDirectionality.directional : BlastDirectionality.explosive,
-          blastDirection: e.blastDirection,
-          numberOfParticles: e.particles,
-          colors: e.colors,
-          gravity: e.gravity,
-          maxBlastForce: e.blastMax,
-          minBlastForce: e.blastMin,
-          emissionFrequency: 0.03,
-          particleDrag: 0.02,
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        Positioned(
+          left: 0,
+          top: 0,
+          width: 90,
+          height: 90,
+          child: IgnorePointer(
+            child: ConfettiWidget(
+              confettiController: _c,
+              shouldLoop: false,
+              blastDirectionality: e.directional
+                  ? BlastDirectionality.directional
+                  : BlastDirectionality.explosive,
+              blastDirection: e.blastDirection,
+              numberOfParticles: e.particles,
+              colors: e.colors,
+              gravity: e.gravity,
+              maxBlastForce: e.blastMax,
+              minBlastForce: e.blastMin,
+              emissionFrequency: 0.03,
+              particleDrag: 0.02,
+            ),
+          ),
         ),
-      ),
+      ],
     );
   }
 }

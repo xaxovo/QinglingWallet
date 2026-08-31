@@ -261,8 +261,10 @@ class _AddRecordSheetState extends ConsumerState<AddRecordSheet> {
           _date.millisecondsSinceEpoch);
     }
     bumpTick(ref);
-    final app = ref.read(appearanceProvider);
-    showConfettiBurst(context, effect: app.effect);
+    if (!_isEdit) {
+      final app = ref.read(appearanceProvider);
+      showConfettiBurst(context, effect: app.effect);
+    }
     if (mounted) Navigator.of(context).pop();
   }
 
