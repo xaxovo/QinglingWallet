@@ -383,7 +383,7 @@ class _CalendarSheetState extends ConsumerState<_CalendarSheet> {
               ),
               const SizedBox(height: 8),
               Row(
-                children: const [
+                children: [
                   for (final w in ['一', '二', '三', '四', '五', '六', '日'])
                     Expanded(
                         child: Center(

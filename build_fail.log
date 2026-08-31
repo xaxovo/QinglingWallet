@@ -1,55 +1,55 @@
-﻿build	构建 Release APK	﻿2026-08-31T10:51:57.3958559Z ##[group]Run flutter build apk --release
-build	构建 Release APK	2026-08-31T10:51:57.3958985Z ^[[36;1mflutter build apk --release^[[0m
-build	构建 Release APK	2026-08-31T10:51:57.3990085Z shell: /usr/bin/bash -e {0}
-build	构建 Release APK	2026-08-31T10:51:57.3990304Z env:
-build	构建 Release APK	2026-08-31T10:51:57.3990595Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
-build	构建 Release APK	2026-08-31T10:51:57.3990997Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
-build	构建 Release APK	2026-08-31T10:51:57.3991369Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.24.5-x64/flutter
-build	构建 Release APK	2026-08-31T10:51:57.3991661Z   PUB_CACHE: /home/runner/.pub-cache
-build	构建 Release APK	2026-08-31T10:51:57.3991863Z ##[endgroup]
-build	构建 Release APK	2026-08-31T10:51:57.8544818Z 
-build	构建 Release APK	2026-08-31T10:54:34.0474028Z Running Gradle task 'assembleRelease'...                        
-build	构建 Release APK	2026-08-31T10:54:34.0476794Z Warning: The plugin flutter_plugin_android_lifecycle requires Android SDK version 35 or higher.
-build	构建 Release APK	2026-08-31T10:54:34.0477970Z For more information about build configuration, see https://flutter.dev/to/review-gradle-config.
-build	构建 Release APK	2026-08-31T10:54:57.0104919Z Your project is configured to compile against Android SDK 34, but the following plugin(s) require to be compiled against a higher Android SDK version:
-build	构建 Release APK	2026-08-31T10:54:57.0165121Z - flutter_plugin_android_lifecycle compiles against Android SDK 35
-build	构建 Release APK	2026-08-31T10:54:57.0184587Z Fix this issue by compiling against the highest Android SDK version (they are backward compatible).
-build	构建 Release APK	2026-08-31T10:54:57.0244089Z Add the following to /home/runner/work/QinglingWallet/QinglingWallet/android/app/build.gradle:
-build	构建 Release APK	2026-08-31T10:54:57.0279699Z 
-build	构建 Release APK	2026-08-31T10:54:57.0324164Z     android {
-build	构建 Release APK	2026-08-31T10:54:57.0354142Z         compileSdk = 35
-build	构建 Release APK	2026-08-31T10:54:57.0394114Z         ...
-build	构建 Release APK	2026-08-31T10:54:57.0414075Z     }
-build	构建 Release APK	2026-08-31T10:54:57.0454436Z 
-build	构建 Release APK	2026-08-31T10:55:00.7047563Z Checking the license for package Android SDK Build-Tools 33.0.1 in /usr/local/lib/android/sdk/licenses
-build	构建 Release APK	2026-08-31T10:55:00.7050585Z License for package Android SDK Build-Tools 33.0.1 accepted.
-build	构建 Release APK	2026-08-31T10:55:00.7051453Z Preparing "Install Android SDK Build-Tools 33.0.1 v.33.0.1".
-build	构建 Release APK	2026-08-31T10:55:02.6054717Z "Install Android SDK Build-Tools 33.0.1 v.33.0.1" ready.
-build	构建 Release APK	2026-08-31T10:55:02.6055893Z Installing Android SDK Build-Tools 33.0.1 in /usr/local/lib/android/sdk/build-tools/33.0.1
-build	构建 Release APK	2026-08-31T10:55:02.6056724Z "Install Android SDK Build-Tools 33.0.1 v.33.0.1" complete.
-build	构建 Release APK	2026-08-31T10:55:03.4053942Z "Install Android SDK Build-Tools 33.0.1 v.33.0.1" finished.
-build	构建 Release APK	2026-08-31T10:55:53.0066475Z lib/screens/transactions_screen.dart:385:17: Error: No named parameter with the name 'cellAspectRatio'.
-build	构建 Release APK	2026-08-31T10:55:53.0088574Z                 cellAspectRatio: 1,
-build	构建 Release APK	2026-08-31T10:55:53.0154032Z                 ^^^^^^^^^^^^^^^
-build	构建 Release APK	2026-08-31T10:55:53.0164423Z /opt/hostedtoolcache/flutter/stable-3.24.5-x64/flutter/packages/flutter/lib/src/widgets/scroll_view.dart:1981:3: Context: Found this candidate, but the arguments don't match.
-build	构建 Release APK	2026-08-31T10:55:53.0165445Z   GridView.count({
-build	构建 Release APK	2026-08-31T10:55:53.0165698Z   ^^^^^^^^^^^^^^
-build	构建 Release APK	2026-08-31T10:55:59.1064466Z Target kernel_snapshot_program failed: Exception
-build	构建 Release APK	2026-08-31T10:55:59.1093627Z 
-build	构建 Release APK	2026-08-31T10:55:59.1093705Z 
-build	构建 Release APK	2026-08-31T10:55:59.1093892Z FAILURE: Build failed with an exception.
-build	构建 Release APK	2026-08-31T10:55:59.1094146Z 
-build	构建 Release APK	2026-08-31T10:55:59.1094396Z * What went wrong:
-build	构建 Release APK	2026-08-31T10:55:59.1094780Z Execution failed for task ':app:compileFlutterBuildRelease'.
-build	构建 Release APK	2026-08-31T10:55:59.1095520Z > Process 'command '/opt/hostedtoolcache/flutter/stable-3.24.5-x64/flutter/bin/flutter'' finished with non-zero exit value 1
-build	构建 Release APK	2026-08-31T10:55:59.1095947Z 
-build	构建 Release APK	2026-08-31T10:55:59.1096105Z * Try:
-build	构建 Release APK	2026-08-31T10:55:59.1096401Z > Run with --stacktrace option to get the stack trace.
-build	构建 Release APK	2026-08-31T10:55:59.1096959Z > Run with --info or --debug option to get more log output.
-build	构建 Release APK	2026-08-31T10:55:59.1097799Z > Run with --scan to get full insights.
-build	构建 Release APK	2026-08-31T10:55:59.1098391Z > Get more help at https://help.gradle.org.
-build	构建 Release APK	2026-08-31T10:55:59.1098813Z 
-build	构建 Release APK	2026-08-31T10:55:59.1099066Z BUILD FAILED in 4m 1s
-build	构建 Release APK	2026-08-31T10:55:59.8077580Z Running Gradle task 'assembleRelease'...                          241.9s
-build	构建 Release APK	2026-08-31T10:55:59.8111934Z Gradle task assembleRelease failed with exit code 1
-build	构建 Release APK	2026-08-31T10:55:59.8566182Z ##[error]Process completed with exit code 1.
+﻿build	构建 Release APK	﻿2026-08-31T11:26:50.4082238Z ##[group]Run flutter build apk --release
+build	构建 Release APK	2026-08-31T11:26:50.4082601Z ^[[36;1mflutter build apk --release^[[0m
+build	构建 Release APK	2026-08-31T11:26:50.4117030Z shell: /usr/bin/bash -e {0}
+build	构建 Release APK	2026-08-31T11:26:50.4117280Z env:
+build	构建 Release APK	2026-08-31T11:26:50.4117580Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+build	构建 Release APK	2026-08-31T11:26:50.4118083Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+build	构建 Release APK	2026-08-31T11:26:50.4118552Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.24.5-x64/flutter
+build	构建 Release APK	2026-08-31T11:26:50.4118921Z   PUB_CACHE: /home/runner/.pub-cache
+build	构建 Release APK	2026-08-31T11:26:50.4119176Z ##[endgroup]
+build	构建 Release APK	2026-08-31T11:26:51.0216771Z 
+build	构建 Release APK	2026-08-31T11:29:18.7312058Z Running Gradle task 'assembleRelease'...                        
+build	构建 Release APK	2026-08-31T11:29:18.7313167Z Warning: The plugin flutter_plugin_android_lifecycle requires Android SDK version 35 or higher.
+build	构建 Release APK	2026-08-31T11:29:18.7336969Z For more information about build configuration, see https://flutter.dev/to/review-gradle-config.
+build	构建 Release APK	2026-08-31T11:29:37.1959196Z Your project is configured to compile against Android SDK 34, but the following plugin(s) require to be compiled against a higher Android SDK version:
+build	构建 Release APK	2026-08-31T11:29:37.1989866Z - flutter_plugin_android_lifecycle compiles against Android SDK 35
+build	构建 Release APK	2026-08-31T11:29:37.2000835Z Fix this issue by compiling against the highest Android SDK version (they are backward compatible).
+build	构建 Release APK	2026-08-31T11:29:37.2027053Z Add the following to /home/runner/work/QinglingWallet/QinglingWallet/android/app/build.gradle:
+build	构建 Release APK	2026-08-31T11:29:37.2046590Z 
+build	构建 Release APK	2026-08-31T11:29:37.2061943Z     android {
+build	构建 Release APK	2026-08-31T11:29:37.2087051Z         compileSdk = 35
+build	构建 Release APK	2026-08-31T11:29:37.2088094Z         ...
+build	构建 Release APK	2026-08-31T11:29:37.2106790Z     }
+build	构建 Release APK	2026-08-31T11:29:37.2126615Z 
+build	构建 Release APK	2026-08-31T11:29:40.4894917Z Checking the license for package Android SDK Build-Tools 33.0.1 in /usr/local/lib/android/sdk/licenses
+build	构建 Release APK	2026-08-31T11:29:40.4911797Z License for package Android SDK Build-Tools 33.0.1 accepted.
+build	构建 Release APK	2026-08-31T11:29:40.4912864Z Preparing "Install Android SDK Build-Tools 33.0.1 v.33.0.1".
+build	构建 Release APK	2026-08-31T11:29:41.6894431Z "Install Android SDK Build-Tools 33.0.1 v.33.0.1" ready.
+build	构建 Release APK	2026-08-31T11:29:41.6906875Z Installing Android SDK Build-Tools 33.0.1 in /usr/local/lib/android/sdk/build-tools/33.0.1
+build	构建 Release APK	2026-08-31T11:29:41.6911274Z "Install Android SDK Build-Tools 33.0.1 v.33.0.1" complete.
+build	构建 Release APK	2026-08-31T11:29:42.0907077Z "Install Android SDK Build-Tools 33.0.1 v.33.0.1" finished.
+build	构建 Release APK	2026-08-31T11:30:27.9937044Z lib/screens/transactions_screen.dart:390:41: Error: Not a constant expression.
+build	构建 Release APK	2026-08-31T11:30:27.9938003Z                             child: Text(w, style: TextStyle(fontSize: 12)))),
+build	构建 Release APK	2026-08-31T11:30:27.9938581Z                                         ^
+build	构建 Release APK	2026-08-31T11:30:27.9939395Z lib/screens/transactions_screen.dart:387:19: Error: 'for' is not supported in constant expressions.
+build	构建 Release APK	2026-08-31T11:30:27.9987053Z                   for (final w in ['一', '二', '三', '四', '五', '六', '日'])
+build	构建 Release APK	2026-08-31T11:30:27.9996907Z                   ^^^
+build	构建 Release APK	2026-08-31T11:30:34.7936837Z Target kernel_snapshot_program failed: Exception
+build	构建 Release APK	2026-08-31T11:30:34.7937855Z 
+build	构建 Release APK	2026-08-31T11:30:34.7940432Z 
+build	构建 Release APK	2026-08-31T11:30:34.7945999Z FAILURE: Build failed with an exception.
+build	构建 Release APK	2026-08-31T11:30:34.8042080Z 
+build	构建 Release APK	2026-08-31T11:30:34.8066541Z * What went wrong:
+build	构建 Release APK	2026-08-31T11:30:34.8091207Z Execution failed for task ':app:compileFlutterBuildRelease'.
+build	构建 Release APK	2026-08-31T11:30:34.8097853Z > Process 'command '/opt/hostedtoolcache/flutter/stable-3.24.5-x64/flutter/bin/flutter'' finished with non-zero exit value 1
+build	构建 Release APK	2026-08-31T11:30:34.8098984Z 
+build	构建 Release APK	2026-08-31T11:30:34.8099130Z * Try:
+build	构建 Release APK	2026-08-31T11:30:34.8099559Z > Run with --stacktrace option to get the stack trace.
+build	构建 Release APK	2026-08-31T11:30:34.8107365Z > Run with --info or --debug option to get more log output.
+build	构建 Release APK	2026-08-31T11:30:34.8111408Z > Run with --scan to get full insights.
+build	构建 Release APK	2026-08-31T11:30:34.8111955Z > Get more help at https://help.gradle.org.
+build	构建 Release APK	2026-08-31T11:30:34.8112330Z 
+build	构建 Release APK	2026-08-31T11:30:34.8112482Z BUILD FAILED in 3m 43s
+build	构建 Release APK	2026-08-31T11:30:35.2949466Z Running Gradle task 'assembleRelease'...                          224.2s
+build	构建 Release APK	2026-08-31T11:30:35.3011349Z Gradle task assembleRelease failed with exit code 1
+build	构建 Release APK	2026-08-31T11:30:35.3109031Z ##[error]Process completed with exit code 1.
