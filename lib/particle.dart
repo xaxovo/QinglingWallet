@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'appearance.dart';
 
 // 保存成功后的纸屑爆发（开源 confetti，本地渲染）
-// 从屏幕左上角一次性喷出一簇，往右下方洒落、落出屏幕底消失；参数从 EffectConfig 读取
+// 一次性喷一簇，从屏幕左上角往右下方洒落、落出屏幕底消失；参数全部从 EffectConfig 读取
 void showConfettiBurst(BuildContext context, {required EffectConfig effect}) {
   if (!effect.enabled || effect.colors.isEmpty) return;
   final overlay = Overlay.of(context, rootOverlay: true);
@@ -38,7 +38,6 @@ class _ConfettiBurstState extends State<_ConfettiBurst> {
     Future.delayed(Duration(milliseconds: ms - 300), () {
       if (mounted) setState(() => _fade = true);
     });
-    // 渐隐结束后移除 overlay
     Future.delayed(Duration(milliseconds: ms + 400), () {
       if (mounted) widget.onDone();
     });
@@ -77,7 +76,7 @@ class _ConfettiBurstState extends State<_ConfettiBurst> {
                 gravity: e.gravity,
                 maxBlastForce: e.blastMax,
                 minBlastForce: e.blastMin,
-                emissionFrequency: 0.06,
+                emissionFrequency: e.emissionFrequency,
                 particleDrag: 0.02,
               ),
             ),

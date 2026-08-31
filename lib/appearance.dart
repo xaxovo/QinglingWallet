@@ -11,17 +11,19 @@ class EffectConfig {
   final double blastMin;
   final double blastDirection; // 弧度；0=右, 1.57=下
   final bool directional;
+  final double emissionFrequency; // 越低越接近一次性喷发
   final bool enabled;
 
   const EffectConfig({
     required this.colors,
-    this.particles = 40,
+    this.particles = 60,
     this.gravity = 0.25,
-    this.durationMs = 4000,
+    this.durationMs = 3500,
     this.blastMax = 24,
     this.blastMin = 12,
     this.blastDirection = 1.1, // 从左上角偏右下方洒落
     this.directional = true,
+    this.emissionFrequency = 0.001, // 一次性喷一簇
     this.enabled = true,
   });
 
@@ -34,6 +36,7 @@ class EffectConfig {
     double? blastMin,
     double? blastDirection,
     bool? directional,
+    double? emissionFrequency,
     bool? enabled,
   }) =>
       EffectConfig(
@@ -45,6 +48,7 @@ class EffectConfig {
         blastMin: blastMin ?? this.blastMin,
         blastDirection: blastDirection ?? this.blastDirection,
         directional: directional ?? this.directional,
+        emissionFrequency: emissionFrequency ?? this.emissionFrequency,
         enabled: enabled ?? this.enabled,
       );
 }
