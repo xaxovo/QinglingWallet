@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'appearance.dart';
 
 // 保存成功后的纸屑爆发（开源 confetti，本地渲染）
-// 从屏幕左上角出发，向右下方自然洒落、落出屏幕底消失；参数从 EffectConfig 读取
+// 从屏幕左上角一次性喷出一簇，往右下方洒落、落出屏幕底消失；参数从 EffectConfig 读取
 void showConfettiBurst(BuildContext context, {required EffectConfig effect}) {
   if (!effect.enabled || effect.colors.isEmpty) return;
   final overlay = Overlay.of(context, rootOverlay: true);
@@ -28,11 +28,18 @@ class _ConfettiBurstState extends State<_ConfettiBurst> {
       duration: Duration(milliseconds: widget.effect.durationMs))
     ..play();
 
+  bool _fade = false;
+
   @override
   void initState() {
     super.initState();
-    // 等粒子基本落出屏幕后再移除，避免中途消失
-    Future.delayed(Duration(milliseconds: widget.effect.durationMs + 900), () {
+    final ms = widget.effect.durationMs;
+    // 结尾 0.3 秒渐隐淡出，避免残屑突然消失
+    Future.delayed(Duration(milliseconds: ms - 300), () {
+      if (mounted) setState(() => _fade = true);
+    });
+    // 渐隐结束后移除 overlay
+    Future.delayed(Duration(milliseconds: ms + 400), () {
       if (mounted) widget.onDone();
     });
   }
@@ -55,20 +62,24 @@ class _ConfettiBurstState extends State<_ConfettiBurst> {
           width: 90,
           height: 90,
           child: IgnorePointer(
-            child: ConfettiWidget(
-              confettiController: _c,
-              shouldLoop: false,
-              blastDirectionality: e.directional
-                  ? BlastDirectionality.directional
-                  : BlastDirectionality.explosive,
-              blastDirection: e.blastDirection,
-              numberOfParticles: e.particles,
-              colors: e.colors,
-              gravity: e.gravity,
-              maxBlastForce: e.blastMax,
-              minBlastForce: e.blastMin,
-              emissionFrequency: 0.03,
-              particleDrag: 0.02,
+            child: AnimatedOpacity(
+              opacity: _fade ? 0 : 1,
+              duration: const Duration(milliseconds: 300),
+              child: ConfettiWidget(
+                confettiController: _c,
+                shouldLoop: false,
+                blastDirectionality: e.directional
+                    ? BlastDirectionality.directional
+                    : BlastDirectionality.explosive,
+                blastDirection: e.blastDirection,
+                numberOfParticles: e.particles,
+                colors: e.colors,
+                gravity: e.gravity,
+                maxBlastForce: e.blastMax,
+                minBlastForce: e.blastMin,
+                emissionFrequency: 0.06,
+                particleDrag: 0.02,
+              ),
             ),
           ),
         ),

@@ -15,12 +15,12 @@ class EffectConfig {
 
   const EffectConfig({
     required this.colors,
-    this.particles = 70,
-    this.gravity = 0.20,
-    this.durationMs = 3000,
-    this.blastMax = 14,
-    this.blastMin = 6,
-    this.blastDirection = 0.9, // 从左上角向右下方洒落
+    this.particles = 40,
+    this.gravity = 0.25,
+    this.durationMs = 4000,
+    this.blastMax = 24,
+    this.blastMin = 12,
+    this.blastDirection = 1.1, // 从左上角偏右下方洒落
     this.directional = true,
     this.enabled = true,
   });
