@@ -347,12 +347,16 @@ class _CalendarSheetState extends ConsumerState<_CalendarSheet> {
         final first = DateTime(_view.year, _view.month, 1);
         final leading = first.weekday - 1; // 周一为0
         final daysInMonth = DateTime(_view.year, _view.month + 1, 0).day;
+        final cellSize = (MediaQuery.of(context).size.width - 40) / 7;
         final cells = <int?>[];
         for (int i = 0; i < leading; i++) {
           cells.add(null);
         }
         for (int d = 1; d <= daysInMonth; d++) {
           cells.add(d);
+        }
+        while (cells.length < 42) {
+          cells.add(null);
         }
         return Padding(
           padding: const EdgeInsets.all(20),
@@ -378,50 +382,58 @@ class _CalendarSheetState extends ConsumerState<_CalendarSheet> {
                 ],
               ),
               const SizedBox(height: 8),
-              GridView.count(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                crossAxisCount: 7,
-                childAspectRatio: 1,
-                children: [
-                  for (final w in const ['一', '二', '三', '四', '五', '六', '日'])
-                    Center(
-                        child:
-                            Text(w, style: const TextStyle(fontSize: 12))),
-                  for (final c in cells)
-                    if (c == null)
-                      const SizedBox()
-                    else
-                      GestureDetector(
-                        onTap: () => _load(DateTime(_view.year, _view.month, c)),
+              Row(
+                children: const [
+                  for (final w in ['一', '二', '三', '四', '五', '六', '日'])
+                    Expanded(
                         child: Center(
-                          child: Container(
-                            width: 34,
-                            height: 34,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              color: _selected != null &&
-                                      _selected!.year == _view.year &&
-                                      _selected!.month == _view.month &&
-                                      _selected!.day == c
-                                  ? Theme.of(context).colorScheme.primary
-                                  : Colors.transparent,
-                              shape: BoxShape.circle,
-                            ),
-                            child: Text(
-                              '$c',
-                              style: TextStyle(
-                                color: _selected?.day == c &&
-                                        _selected?.month == _view.month
-                                    ? Colors.white
-                                    : Colors.black87,
-                                fontWeight: FontWeight.w600,
+                            child: Text(w, style: TextStyle(fontSize: 12)))),
+                ],
+              ),
+              SizedBox(
+                height: 6 * cellSize,
+                child: GridView.count(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  crossAxisCount: 7,
+                  childAspectRatio: 1,
+                  children: [
+                    for (final c in cells)
+                      if (c == null)
+                        const SizedBox()
+                      else
+                        GestureDetector(
+                          onTap: () =>
+                              _load(DateTime(_view.year, _view.month, c)),
+                          child: Center(
+                            child: Container(
+                              width: 34,
+                              height: 34,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: _selected != null &&
+                                        _selected!.year == _view.year &&
+                                        _selected!.month == _view.month &&
+                                        _selected!.day == c
+                                    ? Theme.of(context).colorScheme.primary
+                                    : Colors.transparent,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Text(
+                                '$c',
+                                style: TextStyle(
+                                  color: _selected?.day == c &&
+                                          _selected?.month == _view.month
+                                      ? Colors.white
+                                      : Colors.black87,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                ],
+                  ],
+                ),
               ),
               const Divider(height: 24),
               if (_selected != null) ...[

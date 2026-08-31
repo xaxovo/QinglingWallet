@@ -1,7 +1,7 @@
 ﻿name: qinglingwallet
 description: "清零记账 - 简洁易用、高度个人化的记账 App"
 publish_to: "none"
-version: 0.3.0+1
+version: 0.3.1+1
 
 environment:
   sdk: ">=3.3.0 <4.0.0"

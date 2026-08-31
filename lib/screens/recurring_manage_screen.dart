@@ -121,6 +121,7 @@ class _RuleEditSheetState extends ConsumerState<_RuleEditSheet> {
   late int _type;
   late String _frequency;
   late int _day;
+  late int _monthSel;
   late bool _enabled;
 
   bool get _isEdit => widget.r != null;
@@ -137,6 +138,8 @@ class _RuleEditSheetState extends ConsumerState<_RuleEditSheet> {
     _type = r?.type ?? 0;
     _frequency = r?.frequency ?? 'monthly';
     _day = r?.day ?? 1;
+    _monthSel = (r?.day ?? 101) ~/ 100 < 1 ? 1 : (r?.day ?? 101) ~/ 100;
+    if (_frequency == 'yearly' && _monthSel < 1) _monthSel = 1;
     _enabled = r?.enabled ?? true;
   }
 
@@ -194,29 +197,14 @@ class _RuleEditSheetState extends ConsumerState<_RuleEditSheet> {
                 value: _categoryId,
                 items: [
                   for (final c in cats)
-                    DropdownMenuItem(
-                        value: c.id,
-                        child: Text(c.name)),
+                    DropdownMenuItem(value: c.id, child: Text(c.name)),
                 ],
                 onChanged: (v) => setState(() => _categoryId = v ?? 0),
                 decoration: _dec('分类'),
               ),
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  for (final f in const [
-                    ('weekly', '每周'),
-                    ('monthly', '每月'),
-                    ('yearly', '每年'),
-                  ])
-                    Padding(
-                      padding: const EdgeInsets.only(right: 10),
-                      child: _freqSeg(f.$1, f.$2),
-                    ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              _dayPicker(),
+              const SizedBox(height: 14),
+              // 周期选择（分段 + 日期积木 / 月+日积木）
+              _periodPicker(),
               const SizedBox(height: 10),
               TextField(
                 controller: _note,
@@ -265,32 +253,172 @@ class _RuleEditSheetState extends ConsumerState<_RuleEditSheet> {
     );
   }
 
-  Widget _dayPicker() {
-    return DropdownButtonFormField<int>(
-      value: _day,
-      items: [
-        if (_frequency == 'weekly')
-          for (int d = 1; d <= 7; d++)
-            DropdownMenuItem(value: d, child: Text(_weekdayName(d)))
-        else if (_frequency == 'monthly')
-          for (int d = 1; d <= 31; d++)
-            DropdownMenuItem(value: d, child: Text('${d}号'))
-        else
-          for (int md = 101; md <= 1231; md++)
-            if ((md % 100) >= 1 &&
-                (md % 100) <= 31 &&
-                (md ~/ 100) >= 1 &&
-                (md ~/ 100) <= 12)
-              DropdownMenuItem(
-                  value: md,
-                  child: Text('${md ~/ 100}月${(md % 100)}日')),
+  // ==== 周期选择：分段 + 内容 ====
+  Widget _periodPicker() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // 分段切换
+        Container(
+          padding: const EdgeInsets.all(4),
+          decoration: BoxDecoration(
+            color: const Color(0xFFF3EDED),
+            borderRadius: BorderRadius.circular(24),
+          ),
+          child: Row(
+            children: [
+              for (final f in const [
+                ('weekly', '每周'),
+                ('monthly', '每月'),
+                ('yearly', '每年'),
+              ])
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      HapticFeedback.selectionClick();
+                      setState(() {
+                        _frequency = f.$1;
+                        if (f.$1 == 'weekly') {
+                          _day = _day.clamp(1, 7);
+                        } else if (f.$1 == 'monthly') {
+                          _day = _day.clamp(1, 31);
+                        } else {
+                          _day = _day.clamp(1, 31);
+                          if (_monthSel < 1) _monthSel = 1;
+                        }
+                      });
+                    },
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 220),
+                      padding: const EdgeInsets.symmetric(vertical: 9),
+                      decoration: BoxDecoration(
+                        color: _frequency == f.$1
+                            ? Theme.of(context).colorScheme.primary
+                            : Colors.transparent,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        f.$2,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: _frequency == f.$1
+                              ? Colors.white
+                              : Colors.black54,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 14),
+        AnimatedSwitcher(
+          duration: const Duration(milliseconds: 250),
+          transitionBuilder: (child, anim) => FadeTransition(
+            opacity: anim,
+            child: SlideTransition(
+              position: Tween(begin: const Offset(0, 0.15), end: Offset.zero)
+                  .animate(anim),
+              child: child,
+            ),
+          ),
+          child: KeyedSubtree(key: ValueKey(_frequency), child: _periodBody()),
+        ),
       ],
-      onChanged: (v) => setState(() => _day = v ?? 1),
-      decoration: _dec(_frequency == 'weekly'
-          ? '周几'
-          : _frequency == 'monthly'
-              ? '每月几号'
-              : '每年几月几日'),
+    );
+  }
+
+  Widget _periodBody() {
+    if (_frequency == 'weekly') {
+      return Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        children: [
+          for (int d = 1; d <= 7; d++) _roundChip(_weekdayName(d), _day == d,
+              () => setState(() => _day = d)),
+        ],
+      );
+    }
+    if (_frequency == 'monthly') {
+      return _dayGrid();
+    }
+    // yearly: 月份格 + 日期格
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.only(bottom: 6),
+          child: Text('月份',
+              style: TextStyle(fontSize: 12, color: Colors.black45)),
+        ),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            for (int m = 1; m <= 12; m++)
+              _roundChip('$m月', _monthSel == m,
+                  () => setState(() => _monthSel = m)),
+          ],
+        ),
+        const SizedBox(height: 12),
+        const Padding(
+          padding: EdgeInsets.only(bottom: 6),
+          child: Text('日期',
+              style: TextStyle(fontSize: 12, color: Colors.black45)),
+        ),
+        _dayGrid(),
+      ],
+    );
+  }
+
+  Widget _dayGrid() {
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      children: [
+        for (int d = 1; d <= 31; d++) _roundChip('$d', _day == d,
+            () => setState(() => _day = d)),
+      ],
+    );
+  }
+
+  Widget _roundChip(String label, bool selected, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: () {
+        HapticFeedback.selectionClick();
+        onTap();
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 160),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        decoration: BoxDecoration(
+          color: selected
+              ? Theme.of(context).colorScheme.primary
+              : const Color(0xFFF4F0F0),
+          borderRadius: BorderRadius.circular(14),
+          boxShadow: selected
+              ? [
+                  BoxShadow(
+                    color: Theme.of(context)
+                        .colorScheme
+                        .primary
+                        .withOpacity(0.35),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ]
+              : null,
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            color: selected ? Colors.white : Colors.black87,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
     );
   }
 
@@ -326,33 +454,6 @@ class _RuleEditSheetState extends ConsumerState<_RuleEditSheet> {
     );
   }
 
-  Widget _freqSeg(String freq, String label) {
-    final selected = _frequency == freq;
-    return GestureDetector(
-      onTap: () {
-        HapticFeedback.selectionClick();
-        setState(() {
-          _frequency = freq;
-          _day = freq == 'weekly' ? 1 : freq == 'monthly' ? 1 : 101;
-        });
-      },
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 180),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        decoration: BoxDecoration(
-          color: selected
-              ? Theme.of(context).colorScheme.primary
-              : const Color(0xFFF2EEEE),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Text(label,
-            style: TextStyle(
-                color: selected ? Colors.white : Colors.black87,
-                fontWeight: FontWeight.w600)),
-      ),
-    );
-  }
-
   InputDecoration _dec(String hint) => InputDecoration(
         hintText: hint,
         filled: true,
@@ -372,6 +473,9 @@ class _RuleEditSheetState extends ConsumerState<_RuleEditSheet> {
       return;
     }
     HapticFeedback.mediumImpact();
+    final int dayEncoded = _frequency == 'yearly'
+        ? _monthSel * 100 + _day
+        : _day;
     final rule = RecurringRule(
       id: widget.r?.id ?? 0,
       name: name,
@@ -379,7 +483,7 @@ class _RuleEditSheetState extends ConsumerState<_RuleEditSheet> {
       categoryId: _categoryId,
       type: _type,
       frequency: _frequency,
-      day: _day,
+      day: dayEncoded,
       note: _note.text.trim(),
       enabled: _enabled,
     );
