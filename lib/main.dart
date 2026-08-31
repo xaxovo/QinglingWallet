@@ -66,12 +66,10 @@ class _Header extends StatelessWidget {
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(14),
-          child: Container(
+          child: SizedBox(
             width: 46,
             height: 46,
-            color: const Color(0xFF1A1A2E),
-            padding: const EdgeInsets.all(7),
-            child: Image.asset('assets/logo.png', fit: BoxFit.contain),
+            child: Image.asset('assets/logo.png', fit: BoxFit.cover),
           ),
         ),
         const SizedBox(width: 12),
