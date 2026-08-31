@@ -69,7 +69,7 @@ class _Header extends StatelessWidget {
                     ?.copyWith(fontWeight: FontWeight.w700)),
             Text('把每一笔都记得明明白白',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Colors.black.withValues(alpha: 0.45))),
+                    color: Colors.black.withOpacity(0.45))),
           ],
         ),
       ],
@@ -86,14 +86,14 @@ class _BalanceCard extends StatelessWidget {
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [cs.primary, cs.primary.withValues(alpha: 0.75)],
+          colors: [cs.primary, cs.primary.withOpacity(0.75)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(28),
         boxShadow: [
           BoxShadow(
-            color: cs.primary.withValues(alpha: 0.30),
+            color: cs.primary.withOpacity(0.30),
             blurRadius: 24,
             offset: const Offset(0, 12),
           ),
@@ -103,7 +103,7 @@ class _BalanceCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('本月余额',
-              style: TextStyle(color: Colors.white.withValues(alpha: 0.8))),
+              style: TextStyle(color: Colors.white.withOpacity(0.8))),
           const SizedBox(height: 8),
           const Text('¥ 12,480.00',
               style: TextStyle(
@@ -127,7 +127,7 @@ class _BalanceCard extends StatelessWidget {
       children: [
         Text(label,
             style: TextStyle(
-                color: Colors.white.withValues(alpha: 0.8), fontSize: 12)),
+                color: Colors.white.withOpacity(0.8), fontSize: 12)),
         const SizedBox(height: 4),
         Text(value,
             style: const TextStyle(
@@ -219,7 +219,7 @@ class _RecentList extends StatelessWidget {
                 color: Colors.white,
                 child: ListTile(
                   leading: CircleAvatar(
-                    backgroundColor: e.$5.withValues(alpha: 0.15),
+                    backgroundColor: e.$5.withOpacity(0.15),
                     child: Icon(e.$4, color: e.$5),
                   ),
                   title: Text(e.$1,
