@@ -1,8 +1,10 @@
 import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 import '../models.dart';
 import '../providers.dart';
 
@@ -13,6 +15,7 @@ class DataManageScreen extends ConsumerWidget {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
   }
 
+  // 导出 CSV 并分享出去（可存网盘/发其他设备）
   Future<void> _export(BuildContext context, WidgetRef ref) async {
     final db = ref.read(dbProvider);
     final txs = await db.txs(limit: 100000);
@@ -26,14 +29,22 @@ class DataManageScreen extends ConsumerWidget {
           '${t.amount},${t.type},${catName[t.categoryId] ?? ''},${t.note},${t.ts}');
     }
     await file.writeAsString(sb.toString());
-    _toast(context, '已导出到 应用文档/qinglingwallet_export.csv');
+    await Share.shareXFiles([XFile(file.path)],
+        text: '清零记账导出数据');
   }
 
+  // 导入：用文件选择器挑 CSV
   Future<void> _import(BuildContext context, WidgetRef ref) async {
-    final dir = await getApplicationDocumentsDirectory();
-    final file = File('${dir.path}/qinglingwallet_export.csv');
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['csv'],
+    );
+    if (result == null) return;
+    final path = result.files.single.path;
+    if (path == null) return;
+    final file = File(path);
     if (!await file.exists()) {
-      _toast(context, '未找到导出文件（请先导出）');
+      _toast(context, '文件不存在');
       return;
     }
     final lines = await file.readAsLines();
@@ -73,6 +84,7 @@ class DataManageScreen extends ConsumerWidget {
     _toast(context, '已导入 $inserted 条记录');
   }
 
+  // 备份数据库副本并分享出去
   Future<void> _backup(BuildContext context) async {
     final dir = await getApplicationDocumentsDirectory();
     final src = File('${dir.path}/qinglingwallet.db');
@@ -84,7 +96,7 @@ class DataManageScreen extends ConsumerWidget {
         'qinglingwallet_backup_${DateTime.now().millisecondsSinceEpoch}.db';
     final dst = File('${dir.path}/$name');
     await src.copy(dst.path);
-    _toast(context, '已备份到 应用文档/$name');
+    await Share.shareXFiles([XFile(dst.path)], text: '清零记账备份');
   }
 
   @override
@@ -100,11 +112,11 @@ class DataManageScreen extends ConsumerWidget {
         padding: const EdgeInsets.all(16),
         children: [
           _tile(context, ref, Icons.upload_file, '导出数据（CSV）',
-              '把记账记录导出为 CSV 文件', () => _export(context, ref)),
+              '导出后可分享到其他设备', () => _export(context, ref)),
           _tile(context, ref, Icons.download, '导入数据（CSV）',
-              '从导出的 CSV 导入记录', () => _import(context, ref)),
+              '从 CSV 文件恢复数据', () => _import(context, ref)),
           _tile(context, ref, Icons.archive, '一键备份',
-              '复制一份数据库副本', () => _backup(context)),
+              '备份数据库并分享', () => _backup(context)),
         ],
       ),
     );
