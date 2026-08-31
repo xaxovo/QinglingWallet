@@ -98,6 +98,53 @@ class AppDb {
     return (await db).delete('transactions', where: 'id = ?', whereArgs: [id]);
   }
 
+  Future<int> addCategory(Category c) async {
+    return (await db).insert('categories', {
+      'name': c.name,
+      'icon': c.icon,
+      'color': c.color,
+      'type': c.type,
+      'sort': c.sort,
+    });
+  }
+
+  Future<int> updateCategory(Category c) async {
+    return (await db).update('categories', {
+      'name': c.name,
+      'icon': c.icon,
+      'color': c.color,
+      'type': c.type,
+      'sort': c.sort,
+    }, where: 'id = ?', whereArgs: [c.id]);
+  }
+
+  Future<int> deleteCategory(int id) async {
+    return (await db).delete('categories', where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<int> countTxOfCategory(int categoryId) async {
+    final r = await (await db).rawQuery(
+        'SELECT COUNT(*) AS c FROM transactions WHERE categoryId = ?', [categoryId]);
+    return (r.first['c'] as num?)?.toInt() ?? 0;
+  }
+
+  // 本月某类型(0支出/1收入)各分类合计，用于占比环图
+  Future<List<Map<String, Object?>>> categoryTotals(
+      int type, int monthStart) async {
+    return (await db).rawQuery(
+        'SELECT categoryId, SUM(amount) AS total FROM transactions WHERE type = ? AND ts >= ? GROUP BY categoryId ORDER BY total DESC',
+        [type, monthStart]);
+  }
+
+  // 近6个月每月收入/支出，用于趋势折线
+  Future<List<Map<String, Object?>>> monthlyTrend() async {
+    final now = DateTime.now();
+    final start = DateTime(now.year, now.month - 5, 1).millisecondsSinceEpoch;
+    return (await db).rawQuery(
+        "SELECT strftime('%Y-%m', ts/1000, 'unixepoch', 'localtime') AS m, type, SUM(amount) AS s FROM transactions WHERE ts >= ? GROUP BY m, type ORDER BY m",
+        [start]);
+  }
+
   Future<List<Tx>> txs({int limit = 300}) async {
     final rows = await (await db)
         .query('transactions', orderBy: 'ts DESC', limit: limit);
