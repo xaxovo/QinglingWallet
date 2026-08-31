@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'category_manage_screen.dart';
 import 'data_manage_screen.dart';
+import 'recurring_manage_screen.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -78,6 +79,13 @@ class SettingsScreen extends ConsumerWidget {
               '分类管理',
               '自定义收 / 支分类',
               () => _push(context, const CategoryManageScreen()),
+            ),
+            _entry(
+              context,
+              Icons.event_repeat_outlined,
+              '自动记账',
+              '按周 / 月 / 年自动补记',
+              () => _push(context, const RecurringManageScreen()),
             ),
             _entry(
               context,

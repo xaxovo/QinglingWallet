@@ -8,6 +8,34 @@ import '../util.dart';
 class StatsScreen extends ConsumerWidget {
   const StatsScreen({super.key});
 
+  String _monthLabel(WidgetRef ref) {
+    final off = ref.watch(statsMonthOffsetProvider);
+    final now = DateTime.now();
+    final m = DateTime(now.year, now.month + off, 1);
+    return '${m.year}年${m.month}月';
+  }
+
+  Widget _monthSwitcher(BuildContext context, WidgetRef ref) {
+    final off = ref.watch(statsMonthOffsetProvider);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        IconButton(
+          icon: const Icon(Icons.chevron_left),
+          onPressed: () =>
+              ref.read(statsMonthOffsetProvider.notifier).state = off - 1,
+        ),
+        Text(_monthLabel(ref),
+            style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
+        IconButton(
+          icon: const Icon(Icons.chevron_right),
+          onPressed: () =>
+              ref.read(statsMonthOffsetProvider.notifier).state = off + 1,
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final month = ref.watch(monthTotalsProvider);
@@ -26,8 +54,10 @@ class StatsScreen extends ConsumerWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
+          _monthSwitcher(context, ref),
+          const SizedBox(height: 8),
           month.when(
-            data: (m) => _summaryCard(context, m),
+            data: (m) => _summaryCard(context, m, _monthLabel(ref)),
             loading: () => const SizedBox(),
             error: (e, _) => const SizedBox(),
           ),
@@ -51,7 +81,8 @@ class StatsScreen extends ConsumerWidget {
     );
   }
 
-  Widget _summaryCard(BuildContext context, Map<String, double> m) {
+  Widget _summaryCard(
+      BuildContext context, Map<String, double> m, String monthLabel) {
     final income = m['income'] ?? 0.0;
     final expense = m['expense'] ?? 0.0;
     final balance = income - expense;
@@ -61,12 +92,21 @@ class StatsScreen extends ConsumerWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       child: Padding(
         padding: const EdgeInsets.all(22),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _sum('本月收入', income, Colors.green),
-            _sum('本月支出', expense, Colors.pinkAccent),
-            _sum('结余', balance, Colors.black87),
+            Text(monthLabel,
+                style:
+                    const TextStyle(fontSize: 12, color: Colors.black45)),
+            const SizedBox(height: 14),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _sum('收入', income, Colors.green),
+                _sum('支出', expense, Colors.pinkAccent),
+                _sum('结余', balance, Colors.black87),
+              ],
+            ),
           ],
         ),
       ),
@@ -98,7 +138,7 @@ class StatsScreen extends ConsumerWidget {
           padding: EdgeInsets.all(24),
           child: Center(
               child:
-                  Text('本月还没有支出记录', style: TextStyle(color: Colors.black45))),
+                  Text('这个月还没有支出记录', style: TextStyle(color: Colors.black45))),
         ),
       );
     }
@@ -158,7 +198,10 @@ class StatsScreen extends ConsumerWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(width: 10, height: 10, decoration: BoxDecoration(color: c, shape: BoxShape.circle)),
+        Container(
+            width: 10,
+            height: 10,
+            decoration: BoxDecoration(color: c, shape: BoxShape.circle)),
         const SizedBox(width: 5),
         Text(name, style: const TextStyle(fontSize: 12)),
       ],
@@ -219,18 +262,20 @@ class StatsScreen extends ConsumerWidget {
                   titlesData: FlTitlesData(
                     topTitles: const AxisTitles(),
                     rightTitles: const AxisTitles(),
-                    leftTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                    leftTitles: const AxisTitles(
+                        sideTitles: SideTitles(showTitles: false)),
                     bottomTitles: AxisTitles(
                       sideTitles: SideTitles(
                         showTitles: true,
-                        getTitlesWidget: (v, meta) =>
-                            Padding(
-                              padding: const EdgeInsets.only(top: 6),
-                              child: Text(
-                                v >= 0 && v < labels.length ? labels[v.toInt()] : '',
-                                style: const TextStyle(fontSize: 11),
-                              ),
-                            ),
+                        getTitlesWidget: (v, meta) => Padding(
+                          padding: const EdgeInsets.only(top: 6),
+                          child: Text(
+                            v >= 0 && v < labels.length
+                                ? labels[v.toInt()]
+                                : '',
+                            style: const TextStyle(fontSize: 11),
+                          ),
+                        ),
                       ),
                     ),
                   ),
