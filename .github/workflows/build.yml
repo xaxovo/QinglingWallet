@@ -27,9 +27,6 @@ jobs:
       - name: 生成 Android 平台骨架
         run: flutter create --platforms=android --org com.qingling .
 
-      - name: 生成 App 图标
-        run: dart run flutter_launcher_icons
-
       - name: 设置应用名称
         run: sed -i 's/android:label="qinglingwallet"/android:label="清零记账"/' android/app/src/main/AndroidManifest.xml
 

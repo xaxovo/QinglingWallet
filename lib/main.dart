@@ -64,9 +64,15 @@ class _Header extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        CircleAvatar(
-          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-          child: const Icon(Icons.pets, color: Colors.white),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(14),
+          child: Container(
+            width: 46,
+            height: 46,
+            color: const Color(0xFF1A1A2E),
+            padding: const EdgeInsets.all(7),
+            child: Image.asset('assets/logo.png', fit: BoxFit.contain),
+          ),
         ),
         const SizedBox(width: 12),
         Column(
