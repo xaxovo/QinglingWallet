@@ -382,7 +382,7 @@ class _CalendarSheetState extends ConsumerState<_CalendarSheet> {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 crossAxisCount: 7,
-                cellAspectRatio: 1,
+                childAspectRatio: 1,
                 children: [
                   for (final w in const ['一', '二', '三', '四', '五', '六', '日'])
                     Center(
