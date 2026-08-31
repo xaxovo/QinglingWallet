@@ -1,29 +1,52 @@
-import 'dart:math' as math;
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 
-// 保存成功后的粉色粒子迸发反馈（全局 overlay，短暂显示后自动移除）
-void showParticleBurst(BuildContext context) {
+// 保存成功后的纸屑爆发（开源 confetti 库，纯本地渲染）
+// 颜色/数量/开关从外观配置传入，便于后续多主题与效果自定义
+void showConfettiBurst(
+  BuildContext context, {
+  required List<Color> colors,
+  required int particles,
+  bool enabled = true,
+}) {
+  if (!enabled || colors.isEmpty) return;
   final overlay = Overlay.of(context, rootOverlay: true);
   late final OverlayEntry entry;
-  entry = OverlayEntry(builder: (_) => _ParticleBurst(onDone: () => entry.remove()));
+  entry = OverlayEntry(
+    builder: (_) => _ConfettiBurst(
+      colors: colors,
+      particles: particles,
+      onDone: () => entry.remove(),
+    ),
+  );
   overlay.insert(entry);
 }
 
-class _ParticleBurst extends StatefulWidget {
-  const _ParticleBurst({required this.onDone});
+class _ConfettiBurst extends StatefulWidget {
+  const _ConfettiBurst({
+    required this.colors,
+    required this.particles,
+    required this.onDone,
+  });
+  final List<Color> colors;
+  final int particles;
   final VoidCallback onDone;
 
   @override
-  State<_ParticleBurst> createState() => _ParticleBurstState();
+  State<_ConfettiBurst> createState() => _ConfettiBurstState();
 }
 
-class _ParticleBurstState extends State<_ParticleBurst>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _c = AnimationController(
-      vsync: this, duration: const Duration(milliseconds: 800))
-    ..forward().whenComplete(() {
+class _ConfettiBurstState extends State<_ConfettiBurst> {
+  late final ConfettiController _c =
+      ConfettiController(duration: const Duration(milliseconds: 1100))..play();
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(milliseconds: 1200), () {
       if (mounted) widget.onDone();
     });
+  }
 
   @override
   void dispose() {
@@ -35,36 +58,17 @@ class _ParticleBurstState extends State<_ParticleBurst>
   Widget build(BuildContext context) {
     return Positioned.fill(
       child: IgnorePointer(
-        child: CustomPaint(painter: _BurstPainter(_c, const Color(0xFFEC9CAF))),
+        child: ConfettiWidget(
+          confettiController: _c,
+          shouldLoop: false,
+          blastDirectionality: BlastDirectionality.explosive,
+          numberOfParticles: widget.particles,
+          colors: widget.colors,
+          gravity: 0.25,
+          maxBlastForce: 20,
+          minBlastForce: 8,
+        ),
       ),
     );
   }
-}
-
-class _BurstPainter extends CustomPainter {
-  _BurstPainter(this.c, this.color);
-  final Animation<double> c;
-  final Color color;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final t = c.value;
-    final rnd = math.Random(7);
-    final paint = Paint();
-    for (int i = 0; i < 30; i++) {
-      final ang = -math.pi / 2 + (rnd.nextDouble() - 0.5) * 2.4;
-      final speed = 240 + rnd.nextDouble() * 300;
-      final dx = math.cos(ang) * speed * t;
-      final dy = math.sin(ang) * speed * t + 200 * t * t;
-      final alpha = (1 - t).clamp(0.0, 1.0);
-      final r = 9 * (1 - t * 0.6);
-      final cx = size.width / 2 + dx;
-      final cy = size.height * 0.7 + dy;
-      paint.color = color.withOpacity(alpha);
-      canvas.drawCircle(Offset(cx, cy), r, paint);
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
-// 粉白主题，贴合萌系头像的柔粉/奶白调
-ThemeData buildTheme() {
-  const seed = Color(0xFFEC9CAF);
-  final scheme = ColorScheme.fromSeed(seedColor: seed);
+// 主题由主色种子驱动，主色从外观配置读取，方便后续多主题切换
+ThemeData buildTheme(Color seedColor) {
+  final scheme = ColorScheme.fromSeed(seedColor: seedColor);
   return ThemeData(
     useMaterial3: true,
     colorScheme: scheme,

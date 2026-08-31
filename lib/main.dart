@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'theme.dart';
 import 'providers.dart';
+import 'appearance.dart';
 import 'screens/home_screen.dart';
 import 'screens/transactions_screen.dart';
 import 'screens/stats_screen.dart';
@@ -24,15 +25,16 @@ void main() {
   runApp(const ProviderScope(child: QinglingWallet()));
 }
 
-class QinglingWallet extends StatelessWidget {
+class QinglingWallet extends ConsumerWidget {
   const QinglingWallet({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final seed = ref.watch(appearanceProvider).seedColor;
     return MaterialApp(
       title: '清零记账',
       debugShowCheckedModeBanner: false,
-      theme: buildTheme(),
+      theme: buildTheme(seed),
       home: const SplashGate(),
     );
   }

@@ -6,6 +6,7 @@ import '../models.dart';
 import '../providers.dart';
 import '../util.dart';
 import '../particle.dart';
+import '../appearance.dart';
 
 class AddRecordSheet extends ConsumerStatefulWidget {
   const AddRecordSheet({super.key, this.initialCategoryId, this.editTx});
@@ -260,7 +261,11 @@ class _AddRecordSheetState extends ConsumerState<AddRecordSheet> {
           _date.millisecondsSinceEpoch);
     }
     bumpTick(ref);
-    showParticleBurst(context);
+    final app = ref.read(appearanceProvider);
+    showConfettiBurst(context,
+        colors: app.effect.colors,
+        particles: app.effect.particles,
+        enabled: app.effect.enabled);
     if (mounted) Navigator.of(context).pop();
   }
 
