@@ -46,7 +46,7 @@ class SettingsScreen extends ConsumerWidget {
                       width: 80,
                       height: 80,
                       child: Image.asset('assets/about_logo.png',
-                          fit: BoxFit.contain),
+                          fit: BoxFit.cover),
                     ),
                   ),
                   const SizedBox(height: 14),
