@@ -30,11 +30,14 @@ jobs:
       - name: 设置应用名称
         run: sed -i 's/android:label="qinglingwallet"/android:label="清零记账"/' android/app/src/main/AndroidManifest.xml
 
-      - name: 准备签名 key（首次生成，仓库有则复用）
+      - name: 准备签名 key（用仓库固定 key，保证签名一致）
         env:
           STORE_PASS: qinglingwang2026
         run: |
-          if [ ! -f android/app/keystore.jks ]; then
+          mkdir -p android/app
+          if [ -f keystore/keystore.jks ]; then
+            cp keystore/keystore.jks android/app/keystore.jks
+          else
             keytool -genkeypair -v -keystore android/app/keystore.jks -alias qingling -keyalg RSA -keysize 2048 -validity 10000 -storepass "$STORE_PASS" -keypass "$STORE_PASS" -dname "CN=QinglingWallet, OU=Qingling, O=Qingling, L=Qingling, ST=Qingling, C=CN"
           fi
 
