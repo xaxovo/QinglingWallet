@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'theme.dart';
+import 'providers.dart';
 import 'screens/home_screen.dart';
 import 'screens/transactions_screen.dart';
 import 'screens/stats_screen.dart';
@@ -32,23 +33,117 @@ class QinglingWallet extends StatelessWidget {
       title: '清零记账',
       debugShowCheckedModeBanner: false,
       theme: buildTheme(),
-      home: const HomeShell(),
+      home: const SplashGate(),
     );
   }
 }
 
-class HomeShell extends StatefulWidget {
-  const HomeShell({super.key});
+// 开机过渡：先显示开场动画，再进主界面
+class SplashGate extends StatefulWidget {
+  const SplashGate({super.key});
 
   @override
-  State<HomeShell> createState() => _HomeShellState();
+  State<SplashGate> createState() => _SplashGateState();
 }
 
-class _HomeShellState extends State<HomeShell> {
-  int _index = 0;
+class _SplashGateState extends State<SplashGate> {
+  bool _done = false;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(milliseconds: 1500), () {
+      if (mounted) setState(() => _done = true);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 450),
+      curve: Curves.easeInOut,
+      child: _done
+          ? const KeyedSubtree(
+              key: ValueKey('home'), child: HomeShell())
+          : const KeyedSubtree(
+              key: ValueKey('splash'), child: _Splash()),
+    );
+  }
+}
+
+class _Splash extends StatelessWidget {
+  const _Splash();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      backgroundColor: Color(0xFFFBF7F7),
+      body: Center(child: _Welcome()),
+    );
+  }
+}
+
+class _Welcome extends StatefulWidget {
+  const _Welcome();
+
+  @override
+  State<_Welcome> createState() => _WelcomeState();
+}
+
+class _WelcomeState extends State<_Welcome>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _c = AnimationController(
+      vsync: this, duration: const Duration(milliseconds: 1000))
+    ..forward();
+  late final Animation<double> _fade =
+      CurvedAnimation(parent: _c, curve: Curves.easeOut);
+  late final Animation<double> _scale = Tween(begin: 0.72, end: 1.0)
+      .animate(CurvedAnimation(parent: _c, curve: Curves.easeOutBack));
+
+  @override
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FadeTransition(
+      opacity: _fade,
+      child: ScaleTransition(
+        scale: _scale,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(24),
+              child: SizedBox(
+                width: 100,
+                height: 100,
+                child: Image.asset('assets/logo.png', fit: BoxFit.cover),
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Text('清零记账',
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800)),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class HomeShell extends ConsumerStatefulWidget {
+  const HomeShell({super.key});
+
+  @override
+  ConsumerState<HomeShell> createState() => _HomeShellState();
+}
+
+class _HomeShellState extends ConsumerState<HomeShell> {
+  @override
+  Widget build(BuildContext context) {
+    final index = ref.watch(tabIndexProvider);
     final pages = const [
       HomeScreen(),
       TransactionsScreen(),
@@ -56,10 +151,16 @@ class _HomeShellState extends State<HomeShell> {
       SettingsScreen(),
     ];
     return Scaffold(
-      body: IndexedStack(index: _index, children: pages),
+      body: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 350),
+        switchInCurve: Curves.easeOut,
+        switchOutCurve: Curves.easeIn,
+        child: KeyedSubtree(key: ValueKey(index), child: pages[index]),
+      ),
       bottomNavigationBar: NavigationBar(
-        selectedIndex: _index,
-        onDestinationSelected: (i) => setState(() => _index = i),
+        selectedIndex: index,
+        onDestinationSelected: (i) =>
+            ref.read(tabIndexProvider.notifier).state = i,
         destinations: const [
           NavigationDestination(
               icon: Icon(Icons.home_outlined),

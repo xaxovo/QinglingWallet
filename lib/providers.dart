@@ -4,6 +4,7 @@ import 'data/database.dart';
 
 // 一个"心跳"计数器：任何记账/删除后 +1，让各列表自动刷新
 final tickProvider = StateProvider<int>((ref) => 0);
+final tabIndexProvider = StateProvider<int>((ref) => 0);
 
 final dbProvider = Provider<AppDb>((ref) => AppDb.instance);
 
