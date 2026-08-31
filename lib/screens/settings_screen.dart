@@ -41,16 +41,12 @@ class SettingsScreen extends ConsumerWidget {
               child: Column(
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(22),
-                    child: Container(
-                      color: Colors.white,
-                      padding: const EdgeInsets.all(6),
-                      child: SizedBox(
-                        width: 74,
-                        height: 74,
-                        child: Image.asset('assets/about_logo.png',
-                            fit: BoxFit.contain),
-                      ),
+                    borderRadius: BorderRadius.circular(20),
+                    child: SizedBox(
+                      width: 80,
+                      height: 80,
+                      child: Image.asset('assets/about_logo.png',
+                          fit: BoxFit.contain),
                     ),
                   ),
                   const SizedBox(height: 14),
