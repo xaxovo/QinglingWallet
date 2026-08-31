@@ -30,37 +30,6 @@ jobs:
       - name: 设置应用名称
         run: sed -i 's/android:label="qinglingwallet"/android:label="清零记账"/' android/app/src/main/AndroidManifest.xml
 
-      - name: 准备签名 key（用仓库固定 key，保证签名一致）
-        env:
-          STORE_PASS: qinglingwang2026
-        run: |
-          mkdir -p android/app
-          if [ -f keystore/keystore.jks ]; then
-            cp keystore/keystore.jks android/app/keystore.jks
-          else
-            keytool -genkeypair -v -keystore android/app/keystore.jks -alias qingling -keyalg RSA -keysize 2048 -validity 10000 -storepass "$STORE_PASS" -keypass "$STORE_PASS" -dname "CN=QinglingWallet, OU=Qingling, O=Qingling, L=Qingling, ST=Qingling, C=CN"
-          fi
-
-      - name: 配置 release 签名
-        env:
-          STORE_PASS: qinglingwang2026
-          KEY_PASS: qinglingwang2026
-        run: |
-          python3 - <<'EOF'
-          import os
-          p = 'android/app/build.gradle'
-          c = open(p).read()
-          c = c.replace("buildTypes {", "signingConfigs {\n    release {\n        keyAlias = 'qingling'\n        keyPassword = System.getenv('KEY_PASS')\n        storeFile = file('keystore.jks')\n        storePassword = System.getenv('STORE_PASS')\n    }\n}\n\nbuildTypes {", 1)
-          c = c.replace("signingConfig signingConfigs.debug", "signingConfig signingConfigs.release")
-          open(p, 'w').write(c)
-          EOF
-
-      - name: 上传签名 key（首次用）
-        uses: actions/upload-artifact@v4
-        with:
-          name: signing-keystore
-          path: android/app/keystore.jks
-
       - name: 构建 Release APK
         run: flutter build apk --release
 
