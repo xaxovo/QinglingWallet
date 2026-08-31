@@ -1,35 +1,22 @@
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
+import 'appearance.dart';
 
-// 保存成功后的纸屑爆发（开源 confetti 库，纯本地渲染）
-// 颜色/数量/开关从外观配置传入，便于后续多主题与效果自定义
-void showConfettiBurst(
-  BuildContext context, {
-  required List<Color> colors,
-  required int particles,
-  bool enabled = true,
-}) {
-  if (!enabled || colors.isEmpty) return;
+// 保存成功后的纸屑爆发（开源 confetti，本地渲染）
+// 时长/粒子/范围等全部从 EffectConfig 读取，便于后续自定义切换
+void showConfettiBurst(BuildContext context, {required EffectConfig effect}) {
+  if (!effect.enabled || effect.colors.isEmpty) return;
   final overlay = Overlay.of(context, rootOverlay: true);
   late final OverlayEntry entry;
   entry = OverlayEntry(
-    builder: (_) => _ConfettiBurst(
-      colors: colors,
-      particles: particles,
-      onDone: () => entry.remove(),
-    ),
+    builder: (_) => _ConfettiBurst(effect: effect, onDone: () => entry.remove()),
   );
   overlay.insert(entry);
 }
 
 class _ConfettiBurst extends StatefulWidget {
-  const _ConfettiBurst({
-    required this.colors,
-    required this.particles,
-    required this.onDone,
-  });
-  final List<Color> colors;
-  final int particles;
+  const _ConfettiBurst({required this.effect, required this.onDone});
+  final EffectConfig effect;
   final VoidCallback onDone;
 
   @override
@@ -37,13 +24,14 @@ class _ConfettiBurst extends StatefulWidget {
 }
 
 class _ConfettiBurstState extends State<_ConfettiBurst> {
-  late final ConfettiController _c =
-      ConfettiController(duration: const Duration(milliseconds: 1100))..play();
+  late final ConfettiController _c = ConfettiController(
+      duration: Duration(milliseconds: widget.effect.durationMs))
+    ..play();
 
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(milliseconds: 1200), () {
+    Future.delayed(Duration(milliseconds: widget.effect.durationMs + 400), () {
       if (mounted) widget.onDone();
     });
   }
@@ -56,17 +44,20 @@ class _ConfettiBurstState extends State<_ConfettiBurst> {
 
   @override
   Widget build(BuildContext context) {
+    final e = widget.effect;
     return Positioned.fill(
       child: IgnorePointer(
         child: ConfettiWidget(
           confettiController: _c,
           shouldLoop: false,
           blastDirectionality: BlastDirectionality.explosive,
-          numberOfParticles: widget.particles,
-          colors: widget.colors,
-          gravity: 0.25,
-          maxBlastForce: 20,
-          minBlastForce: 8,
+          numberOfParticles: e.particles,
+          colors: e.colors,
+          gravity: e.gravity,
+          maxBlastForce: e.blastMax,
+          minBlastForce: e.blastMin,
+          emissionFrequency: 0.02,
+          particleDrag: 0.05,
         ),
       ),
     );

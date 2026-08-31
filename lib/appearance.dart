@@ -6,12 +6,18 @@ class EffectConfig {
   final List<Color> colors;
   final int particles;
   final double gravity;
+  final int durationMs;
+  final double blastMax;
+  final double blastMin;
   final bool enabled;
 
   const EffectConfig({
     required this.colors,
-    required this.particles,
-    this.gravity = 0.25,
+    this.particles = 150,
+    this.gravity = 0.10,
+    this.durationMs = 2600,
+    this.blastMax = 36,
+    this.blastMin = 12,
     this.enabled = true,
   });
 
@@ -19,12 +25,18 @@ class EffectConfig {
     List<Color>? colors,
     int? particles,
     double? gravity,
+    int? durationMs,
+    double? blastMax,
+    double? blastMin,
     bool? enabled,
   }) =>
       EffectConfig(
         colors: colors ?? this.colors,
         particles: particles ?? this.particles,
         gravity: gravity ?? this.gravity,
+        durationMs: durationMs ?? this.durationMs,
+        blastMax: blastMax ?? this.blastMax,
+        blastMin: blastMin ?? this.blastMin,
         enabled: enabled ?? this.enabled,
       );
 }
@@ -53,7 +65,6 @@ class AppAppearanceNotifier extends StateNotifier<AppAppearance> {
               Color(0xFFFDE3EA),
               Color(0xFFF8C8D4),
             ],
-            particles: 60,
           ),
         ));
 

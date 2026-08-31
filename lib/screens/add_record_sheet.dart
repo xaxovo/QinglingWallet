@@ -262,10 +262,7 @@ class _AddRecordSheetState extends ConsumerState<AddRecordSheet> {
     }
     bumpTick(ref);
     final app = ref.read(appearanceProvider);
-    showConfettiBurst(context,
-        colors: app.effect.colors,
-        particles: app.effect.particles,
-        enabled: app.effect.enabled);
+    showConfettiBurst(context, effect: app.effect);
     if (mounted) Navigator.of(context).pop();
   }
 

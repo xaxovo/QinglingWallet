@@ -1,0 +1,10 @@
+git : accepts 1 arg(s), received 0
+所在位置 行:5 字符: 3
++   git push origin main 2>&1 | Out-String | Set-Content push.log
++   ~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (accepts 1 arg(s), received 0:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+To https://github.com/xaxovo/QinglingWallet.git
+   c9e954d..a709a1e  main -> main
+
