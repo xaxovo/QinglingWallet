@@ -16,3 +16,4 @@ Thumbs.db
 # Android
 android/.gradle/
 android/local.properties
+dist/
