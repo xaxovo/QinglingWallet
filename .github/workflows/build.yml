@@ -25,7 +25,7 @@ jobs:
         run: flutter pub get
 
       - name: 生成 Android 平台骨架
-        run: flutter create --platforms=android --org com.qingling .
+        run: flutter create --platforms=android --org com.qingling --project-name qinglingwallet .
 
       - name: 设置应用名称
         run: sed -i 's/android:label="qinglingwallet"/android:label="清零记账"/' android/app/src/main/AndroidManifest.xml

@@ -1,43 +1,15 @@
-﻿build	构建 Release APK	﻿2026-08-31T05:50:33.6761360Z ##[group]Run flutter build apk --release
-build	构建 Release APK	2026-08-31T05:50:33.6762007Z ^[[36;1mflutter build apk --release^[[0m
-build	构建 Release APK	2026-08-31T05:50:33.6797999Z shell: /usr/bin/bash -e {0}
-build	构建 Release APK	2026-08-31T05:50:33.6798289Z env:
-build	构建 Release APK	2026-08-31T05:50:33.6798622Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
-build	构建 Release APK	2026-08-31T05:50:33.6799444Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
-build	构建 Release APK	2026-08-31T05:50:33.6799966Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.24.5-x64/flutter
-build	构建 Release APK	2026-08-31T05:50:33.6800373Z   PUB_CACHE: /home/runner/.pub-cache
-build	构建 Release APK	2026-08-31T05:50:33.6800639Z ##[endgroup]
-build	构建 Release APK	2026-08-31T05:50:34.2153105Z 
-build	构建 Release APK	2026-08-31T05:53:02.6705081Z Running Gradle task 'assembleRelease'...                        
-build	构建 Release APK	2026-08-31T05:53:02.6707555Z Checking the license for package Android SDK Build-Tools 33.0.1 in /usr/local/lib/android/sdk/licenses
-build	构建 Release APK	2026-08-31T05:53:02.6708894Z License for package Android SDK Build-Tools 33.0.1 accepted.
-build	构建 Release APK	2026-08-31T05:53:02.6710070Z Preparing "Install Android SDK Build-Tools 33.0.1 v.33.0.1".
-build	构建 Release APK	2026-08-31T05:53:04.2473736Z "Install Android SDK Build-Tools 33.0.1 v.33.0.1" ready.
-build	构建 Release APK	2026-08-31T05:53:04.2478275Z Installing Android SDK Build-Tools 33.0.1 in /usr/local/lib/android/sdk/build-tools/33.0.1
-build	构建 Release APK	2026-08-31T05:53:04.2486565Z "Install Android SDK Build-Tools 33.0.1 v.33.0.1" complete.
-build	构建 Release APK	2026-08-31T05:53:04.6491988Z "Install Android SDK Build-Tools 33.0.1 v.33.0.1" finished.
-build	构建 Release APK	2026-08-31T05:53:29.7506833Z lib/main.dart:64:7: Error: No named parameter with the name 'curve'.
-build	构建 Release APK	2026-08-31T05:53:29.7529946Z       curve: Curves.easeInOut,
-build	构建 Release APK	2026-08-31T05:53:29.7549719Z       ^^^^^
-build	构建 Release APK	2026-08-31T05:53:29.7551050Z /opt/hostedtoolcache/flutter/stable-3.24.5-x64/flutter/packages/flutter/lib/src/widgets/animated_switcher.dart:106:9: Context: Found this candidate, but the arguments don't match.
-build	构建 Release APK	2026-08-31T05:53:29.7569745Z   const AnimatedSwitcher({
-build	构建 Release APK	2026-08-31T05:53:29.7589640Z         ^^^^^^^^^^^^^^^^
-build	构建 Release APK	2026-08-31T05:53:34.6500254Z Target kernel_snapshot_program failed: Exception
-build	构建 Release APK	2026-08-31T05:53:34.6500863Z 
-build	构建 Release APK	2026-08-31T05:53:34.7509666Z 
-build	构建 Release APK	2026-08-31T05:53:34.7770910Z FAILURE: Build failed with an exception.
-build	构建 Release APK	2026-08-31T05:53:34.7771373Z 
-build	构建 Release APK	2026-08-31T05:53:34.7799730Z * What went wrong:
-build	构建 Release APK	2026-08-31T05:53:34.7838590Z Execution failed for task ':app:compileFlutterBuildRelease'.
-build	构建 Release APK	2026-08-31T05:53:34.7839967Z > Process 'command '/opt/hostedtoolcache/flutter/stable-3.24.5-x64/flutter/bin/flutter'' finished with non-zero exit value 1
-build	构建 Release APK	2026-08-31T05:53:34.7853393Z 
-build	构建 Release APK	2026-08-31T05:53:34.7853793Z * Try:
-build	构建 Release APK	2026-08-31T05:53:34.7854726Z > Run with --stacktrace option to get the stack trace.
-build	构建 Release APK	2026-08-31T05:53:34.7855515Z > Run with --info or --debug option to get more log output.
-build	构建 Release APK	2026-08-31T05:53:34.7881685Z > Run with --scan to get full insights.
-build	构建 Release APK	2026-08-31T05:53:34.7882504Z > Get more help at https://help.gradle.org.
-build	构建 Release APK	2026-08-31T05:53:34.8077539Z 
-build	构建 Release APK	2026-08-31T05:53:34.8099720Z BUILD FAILED in 3m
-build	构建 Release APK	2026-08-31T05:53:35.3263630Z Running Gradle task 'assembleRelease'...                          181.1s
-build	构建 Release APK	2026-08-31T05:53:35.3314800Z Gradle task assembleRelease failed with exit code 1
-build	构建 Release APK	2026-08-31T05:53:35.3384508Z ##[error]Process completed with exit code 1.
+﻿build	生成 Android 平台骨架	﻿2026-08-31T06:24:05.7027837Z ##[group]Run flutter create --platforms=android --org com.qingling .
+build	生成 Android 平台骨架	2026-08-31T06:24:05.7028729Z ^[[36;1mflutter create --platforms=android --org com.qingling .^[[0m
+build	生成 Android 平台骨架	2026-08-31T06:24:05.7071114Z shell: /usr/bin/bash -e {0}
+build	生成 Android 平台骨架	2026-08-31T06:24:05.7071400Z env:
+build	生成 Android 平台骨架	2026-08-31T06:24:05.7071735Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+build	生成 Android 平台骨架	2026-08-31T06:24:05.7072236Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+build	生成 Android 平台骨架	2026-08-31T06:24:05.7072760Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.24.5-x64/flutter
+build	生成 Android 平台骨架	2026-08-31T06:24:05.7073161Z   PUB_CACHE: /home/runner/.pub-cache
+build	生成 Android 平台骨架	2026-08-31T06:24:05.7073428Z ##[endgroup]
+build	生成 Android 平台骨架	2026-08-31T06:24:05.9557996Z "QinglingWallet" is not a valid Dart package name.
+build	生成 Android 平台骨架	2026-08-31T06:24:05.9558740Z 
+build	生成 Android 平台骨架	2026-08-31T06:24:05.9562492Z The name should be all lowercase, with underscores to separate words, "just_like_this".Use only basic Latin letters and Arabic digits: [a-z0-9_].Also, make sure the name is a valid Dart identifier—that it doesn't start with digits and isn't a reserved word.
+build	生成 Android 平台骨架	2026-08-31T06:24:05.9564518Z See https://dart.dev/tools/pub/pubspec#name for more information.
+build	生成 Android 平台骨架	2026-08-31T06:24:05.9565137Z Try "qinglingwallet" instead.
+build	生成 Android 平台骨架	2026-08-31T06:24:05.9595719Z ##[error]Process completed with exit code 1.
