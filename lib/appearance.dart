@@ -9,15 +9,19 @@ class EffectConfig {
   final int durationMs;
   final double blastMax;
   final double blastMin;
+  final double blastDirection; // 弧度；-1.5708 = 向上
+  final bool directional;
   final bool enabled;
 
   const EffectConfig({
     required this.colors,
-    this.particles = 150,
-    this.gravity = 0.10,
-    this.durationMs = 2600,
-    this.blastMax = 36,
-    this.blastMin = 12,
+    this.particles = 70,
+    this.gravity = 0.20,
+    this.durationMs = 3000,
+    this.blastMax = 20,
+    this.blastMin = 8,
+    this.blastDirection = -1.5708,
+    this.directional = true,
     this.enabled = true,
   });
 
@@ -28,6 +32,8 @@ class EffectConfig {
     int? durationMs,
     double? blastMax,
     double? blastMin,
+    double? blastDirection,
+    bool? directional,
     bool? enabled,
   }) =>
       EffectConfig(
@@ -37,6 +43,8 @@ class EffectConfig {
         durationMs: durationMs ?? this.durationMs,
         blastMax: blastMax ?? this.blastMax,
         blastMin: blastMin ?? this.blastMin,
+        blastDirection: blastDirection ?? this.blastDirection,
+        directional: directional ?? this.directional,
         enabled: enabled ?? this.enabled,
       );
 }
