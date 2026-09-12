@@ -79,5 +79,3 @@ assets/
 
 > 注意：`--project-name qinglingwallet` 必须显式小写（仓库名大写会导致包名校验失败）。当前构建使用 Flutter 默认调试签名。
 
-## 运行说明
-本机未装 Flutter/Android SDK，完整本地构建见 `开发计划.md`；APK 交付走 GitHub Releases。
